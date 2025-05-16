@@ -1,40 +1,40 @@
 -- Users Table
 CREATE TABLE users (
-    id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    bio TEXT,
-    profile_image VARCHAR(255),
-    role VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    username NVARCHAR(50) NOT NULL UNIQUE,
+    email NVARCHAR(255) NOT NULL UNIQUE,
+    password NVARCHAR(255) NOT NULL,
+    first_name NVARCHAR(100),
+    last_name NVARCHAR(100),
+    bio NVARCHAR(MAX),
+    profile_image NVARCHAR(255),
+    role NVARCHAR(20) NOT NULL,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
 );
 
 -- Projects Table
 CREATE TABLE projects (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT,
-    content TEXT NOT NULL,
-    thumbnail VARCHAR(255),
-    github_url VARCHAR(255),
-    live_url VARCHAR(255),
-    featured BOOLEAN DEFAULT false,
-    published BOOLEAN DEFAULT false,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    title NVARCHAR(255) NOT NULL,
+    slug NVARCHAR(255) NOT NULL UNIQUE,
+    description NVARCHAR(MAX),
+    content NVARCHAR(MAX) NOT NULL,
+    thumbnail NVARCHAR(255),
+    github_url NVARCHAR(255),
+    live_url NVARCHAR(255),
+    featured BIT DEFAULT 0,
+    published BIT DEFAULT 0,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE(),
     user_id BIGINT REFERENCES users(id)
 );
 
 -- Technologies Table
 CREATE TABLE technologies (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    icon VARCHAR(255)
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL UNIQUE,
+    icon NVARCHAR(255)
 );
 
 -- Project Technologies (Junction Table)
@@ -46,21 +46,21 @@ CREATE TABLE project_technologies (
 
 -- Videos Table
 CREATE TABLE videos (
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    thumbnail VARCHAR(255),
-    description TEXT,
-    order_index INTEGER DEFAULT 0,
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    title NVARCHAR(255) NOT NULL,
+    url NVARCHAR(255) NOT NULL,
+    thumbnail NVARCHAR(255),
+    description NVARCHAR(MAX),
+    order_index INT DEFAULT 0,
     project_id BIGINT REFERENCES projects(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
 );
 
 -- Tags Table
 CREATE TABLE tags (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Project Tags (Junction Table)
@@ -72,12 +72,12 @@ CREATE TABLE project_tags (
 
 -- Images Table for Project Gallery
 CREATE TABLE project_images (
-    id BIGSERIAL PRIMARY KEY,
-    url VARCHAR(255) NOT NULL,
-    alt_text VARCHAR(255),
-    order_index INTEGER DEFAULT 0,
+    id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    url NVARCHAR(255) NOT NULL,
+    alt_text NVARCHAR(255),
+    order_index INT DEFAULT 0,
     project_id BIGINT REFERENCES projects(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME2 DEFAULT GETDATE()
 );
 
 -- Insert default admin user (password: admin)
@@ -90,6 +90,6 @@ INSERT INTO technologies (name, icon) VALUES
 ('Spring Boot', 'spring'),
 ('React', 'react'),
 ('TypeScript', 'typescript'),
-('PostgreSQL', 'postgresql'),
+('SQL Server', 'sqlserver'),
 ('Docker', 'docker'),
-('AWS', 'aws'); 
+('Azure', 'azure'); 

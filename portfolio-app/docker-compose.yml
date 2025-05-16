@@ -1,15 +1,14 @@
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: portfolio-postgres
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: portfolio-sqlserver
     environment:
-      POSTGRES_DB: portfolio
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "MEMPShanmukh6!(("
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - sqlserver_data:/var/opt/mssql
     networks:
       - portfolio-network
 
@@ -17,12 +16,12 @@ services:
     build: ./backend
     container_name: portfolio-backend
     depends_on:
-      - postgres
+      - sqlserver
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/portfolio
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=portfolio;encrypt=false
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: MEMPShanmukh6!((
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       JWT_SECRET: your-secret-key-here-should-be-very-long-and-secure-in-production
     ports:
       - "8080:8080"
@@ -44,4 +43,4 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data: 
+  sqlserver_data: 
