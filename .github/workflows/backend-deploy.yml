@@ -8,6 +8,10 @@ on:
       - 'portfolio-app/backend/**'
       - '.github/workflows/backend-deploy.yml'
 
+permissions:
+  id-token: write        # allow azure/login to fetch the OIDC token
+  contents: read         # allow checkout to read your code
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
