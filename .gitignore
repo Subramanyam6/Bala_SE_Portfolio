@@ -1,0 +1,46 @@
+# Backend
+portfolio-app/backend/target/
+portfolio-app/backend/.mvn/
+portfolio-app/backend/mvnw
+portfolio-app/backend/mvnw.cmd
+portfolio-app/backend/.idea/
+portfolio-app/backend/*.iws
+portfolio-app/backend/*.iml
+portfolio-app/backend/*.ipr
+portfolio-app/backend/.settings/
+portfolio-app/backend/.classpath
+portfolio-app/backend/.project
+portfolio-app/backend/.factorypath
+
+# Frontend
+portfolio-app/frontend/node_modules/
+portfolio-app/frontend/dist/
+portfolio-app/frontend/.vite/
+portfolio-app/frontend/.env
+portfolio-app/frontend/.env.local
+portfolio-app/frontend/.env.development.local
+portfolio-app/frontend/.env.test.local
+portfolio-app/frontend/.env.production.local
+portfolio-app/frontend/npm-debug.log*
+portfolio-app/frontend/yarn-debug.log*
+portfolio-app/frontend/yarn-error.log*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.env
+docker-compose.override.yml 
