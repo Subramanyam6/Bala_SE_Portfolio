@@ -29,18 +29,20 @@ jobs:
       run: cd portfolio-app/backend && mvn clean package -DskipTests
       
     - name: Login to Azure
-      uses: azure/login@v2
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        auth-type: SERVICE_PRINCIPAL
       
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
+    - name: Deploy with Azure CLI
+      uses: azure/cli@v1
       with:
-        app-name: 'portfolio-api-app'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: 'portfolio-app/backend/target/*.jar'
-        
+        azcliversion: 'latest'
+        inlineScript: |
+          az webapp deploy \
+            --resource-group rg-portfolio \
+            --name portfolio-api-app \
+            --src-path portfolio-app/backend/target/*.jar
+
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
