@@ -26,7 +26,7 @@ jobs:
       run: cd portfolio-app/frontend && npm run build
       
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: portfolio-frontend
         path: portfolio-app/frontend/dist 
