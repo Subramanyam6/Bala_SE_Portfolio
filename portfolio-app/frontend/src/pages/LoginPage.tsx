@@ -1,8 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/api';
 
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

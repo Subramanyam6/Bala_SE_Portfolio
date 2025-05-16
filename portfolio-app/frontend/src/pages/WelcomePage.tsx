@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RobotAnimation from '../components/welcome/RobotAnimation';
 import Particles from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
-import type { Container, Engine } from 'tsparticles-engine';
+import type { Engine } from 'tsparticles-engine';
 
 const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
@@ -11,7 +11,7 @@ const WelcomePage: React.FC = () => {
     await loadSlim(engine);
   };
 
-  const particlesLoaded = async (container?: Container) => {
+  const particlesLoaded = async () => {
     // Particles loaded successfully
   };
   

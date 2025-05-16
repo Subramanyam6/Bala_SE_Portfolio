@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface TechStackModalProps {
@@ -133,19 +133,6 @@ const TechStackModal: React.FC<TechStackModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes modal-pop {
-          0% {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
     </div>
   );
 };

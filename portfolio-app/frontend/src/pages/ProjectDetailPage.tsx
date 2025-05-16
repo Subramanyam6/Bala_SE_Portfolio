@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import ReactPlayer from 'react-player/lazy';
 import { projectService } from '../services/api';
 
 interface Technology {
@@ -55,7 +54,6 @@ const ProjectDetailPage = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -76,71 +74,6 @@ const ProjectDetailPage = () => {
 
     fetchProject();
   }, [slug]);
-
-  // Dummy project content based on slug
-  const getProjectContent = () => {
-    // You can customize this function to return different content based on slug
-    return {
-      title: slug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') || 'Project Details',
-      description: 'This is a detailed overview of this innovative project.',
-      content: `
-        <h2>Project Overview</h2>
-        <p>This project was developed to address specific needs in the target market. The primary goal was to create a solution that is both user-friendly and technically robust.</p>
-        
-        <h2>Technical Challenges</h2>
-        <p>During development, several challenges were encountered, particularly in:</p>
-        <ul>
-          <li>Optimizing database queries for better performance</li>
-          <li>Implementing secure authentication mechanisms</li>
-          <li>Creating a responsive and intuitive user interface</li>
-          <li>Ensuring cross-browser compatibility</li>
-        </ul>
-        
-        <h2>Key Features</h2>
-        <p>The project includes several key features that set it apart:</p>
-        <ul>
-          <li>Advanced search functionality</li>
-          <li>Real-time notifications</li>
-          <li>User preference customization</li>
-          <li>Comprehensive analytics dashboard</li>
-          <li>Seamless third-party integrations</li>
-        </ul>
-        
-        <h2>Technologies Used</h2>
-        <p>This project leverages a modern technology stack including:</p>
-        <ul>
-          <li>Frontend: React, TypeScript, Tailwind CSS</li>
-          <li>Backend: Node.js, Express, MongoDB</li>
-          <li>Deployment: Docker, AWS</li>
-          <li>Testing: Jest, Cypress</li>
-        </ul>
-        
-        <h2>Future Plans</h2>
-        <p>Future development plans include expanding functionality with additional features such as:</p>
-        <ul>
-          <li>Mobile application development</li>
-          <li>AI-powered recommendations</li>
-          <li>Enhanced reporting capabilities</li>
-          <li>Expanded language support</li>
-        </ul>
-      `,
-      liveUrl: slug === 'equipment-marketplace' 
-        ? 'https://miniequipmarketplace-factgzd7cpeabne8.canadacentral-01.azurewebsites.net'
-        : '#',
-      githubUrl: '#',
-      technologies: [
-        'React', 'TypeScript', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS',
-        'Docker', 'AWS', 'Jest', 'Cypress'
-      ],
-      images: [
-        'https://via.placeholder.com/1200x600',
-        'https://via.placeholder.com/1200x600',
-        'https://via.placeholder.com/1200x600'
-      ]
-    };
-  };
-
-  const projectContent = getProjectContent();
 
   if (loading) {
     return (
@@ -187,115 +120,105 @@ const ProjectDetailPage = () => {
     );
   }
 
-  // Default placeholder image if thumbnail is null
-  const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/1200x600?text=No+Image';
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Back button */}
-          <div className="mb-8">
-            <Link
-              to="/projects"
-              className="inline-flex items-center text-primary-600 hover:text-primary-700"
-            >
-              <ArrowLeftIcon className="h-5 w-5 mr-2" />
-              Back to Projects
-            </Link>
-          </div>
-
-          {/* Project Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
-              {project.title}
-            </h1>
-            <p className="text-xl text-gray-600 mb-6">
-              {project.description}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {project.liveUrl !== '#' && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                >
-                  View Live Site
-                </a>
-              )}
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline"
+    <div className="bg-gray-50 min-h-screen">
+      {/* Project Header */}
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 py-20">
+        <div className="container mx-auto px-4">
+          <Link 
+            to="/projects" 
+            className="inline-flex items-center text-white mb-6 hover:underline"
+          >
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
+            Back to Projects
+          </Link>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">{project.title}</h1>
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech: any) => (
+              <span 
+                key={tech.name} 
+                className="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm"
               >
-                View Code
-              </a>
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Project Content */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-12">
+          <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: project.content }} />
+        </div>
+        
+        {/* Project Info */}
+        <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-12">
+          <h2 className="text-2xl font-bold mb-6">Project Details</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Technologies Used</h3>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.technologies.map((tech: any) => (
+                  <span 
+                    key={tech.name} 
+                    className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm"
+                  >
+                    {tech.name}
+                  </span>
+                ))}
+              </div>
+              
+              <h3 className="text-xl font-semibold mb-4">Project Links</h3>
+              <div className="flex flex-wrap gap-4">
+                {project.liveUrl && (
+                  <a
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
+                    href={project.liveUrl || undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>View Live</span>
+                  </a>
+                )}
+                {project.githubUrl && (
+                  <a
+                    className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition-colors flex items-center gap-2"
+                    href={project.githubUrl || undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>GitHub Repo</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-
-          {/* Project Image Gallery */}
-          <div className="mb-12">
-            <div className="bg-white rounded-lg overflow-hidden shadow-md">
-              <img
-                src={project.images[0]}
-                alt={project.title}
-                className="w-full h-auto"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <img
-                src={project.images[1]}
-                alt={`${project.title} screenshot 2`}
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
-              <img
-                src={project.images[2]}
-                alt={`${project.title} screenshot 3`}
-                className="w-full h-auto rounded-lg shadow-sm"
-              />
-            </div>
-          </div>
-
-          {/* Project Content */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-12">
-            <div 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: project.content }}
+        </div>
+        
+        {/* Project Image Gallery */}
+        <div className="mb-12">
+          {project.images && project.images.length > 0 && (
+            <img
+              className="w-full h-auto object-cover rounded-md"
+              src={typeof project.images[0] === 'string' ? project.images[0] : project.images[0].url}
+              alt={`Project screenshot 1`}
             />
-          </div>
-
-          {/* Technologies Used */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Technologies Used</h2>
-            <div className="flex flex-wrap gap-3">
-              {project.technologies.map((tech, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-100 rounded-full px-4 py-2 text-sm font-medium text-gray-700"
-                >
-                  {tech.name}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="bg-primary-700 text-white p-8 rounded-lg text-center">
-            <h2 className="text-2xl font-bold mb-4">Interested in similar projects?</h2>
-            <p className="mb-6">
-              Check out my other work or get in touch to discuss your project ideas.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Link to="/projects" className="btn bg-white text-primary-700 hover:bg-gray-100">
-                More Projects
-              </Link>
-              <Link to="/contact" className="btn border border-white text-white hover:bg-primary-600">
-                Contact Me
-              </Link>
-            </div>
-          </div>
+          )}
+          {project.images && project.images.length > 1 && (
+            <img
+              className="w-full h-auto object-cover rounded-md"
+              src={typeof project.images[1] === 'string' ? project.images[1] : project.images[1].url}
+              alt={`Project screenshot 2`}
+            />
+          )}
+          {project.images && project.images.length > 2 && (
+            <img
+              className="w-full h-auto object-cover rounded-md"
+              src={typeof project.images[2] === 'string' ? project.images[2] : project.images[2].url}
+              alt={`Project screenshot 3`}
+            />
+          )}
         </div>
       </div>
     </div>

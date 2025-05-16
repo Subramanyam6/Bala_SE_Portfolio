@@ -186,7 +186,7 @@ const RobotAnimation: React.FC = () => {
           const waveClip = findClip(gltf, 'Wave');
           
           if (idleClip) {
-            const idle = mixer.clipAction(idleClip).play();
+            mixer.clipAction(idleClip).play();
           }
           
           if (waveClip) {
