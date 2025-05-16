@@ -31,4 +31,5 @@ jobs:
           app_location:              ""                                   # skip Oryx build
           api_location:              ""                                   # no Azure Functions
           output_location:           "portfolio-app/frontend/dist"        # only upload your build output
+          skip_deploy_on_missing_secrets: true
 

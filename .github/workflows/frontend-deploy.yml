@@ -12,10 +12,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '18'
         
@@ -34,4 +34,5 @@ jobs:
         app_location: "portfolio-app/frontend"  # Location where staticwebapp.config.json is found
         api_location: ""  # No Azure Functions
         output_location: "dist"  # Relative to app_location
-        config_file_location: "portfolio-app/frontend" # Location of staticwebapp.config.json 
+        config_file_location: "portfolio-app/frontend" # Location of staticwebapp.config.json
+        skip_deploy_on_missing_secrets: true 
