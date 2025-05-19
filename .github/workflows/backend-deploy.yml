@@ -42,9 +42,9 @@ jobs:
             --resource-group rg-portfolio \
             --name portfolio-api-app \
             --src-path portfolio-app/backend/target/*.jar
-
+        
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
       with:
         name: java-app
-        path: portfolio-app/backend/target/*.jar
+        path: portfolio-app/backend/target/*.jar 

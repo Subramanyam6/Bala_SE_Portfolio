@@ -4,6 +4,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import ProjectCard from '../components/projects/ProjectCard';
 import SkillsSection from '../components/skills/SkillsSection';
 import TechStackModal from '../components/home/TechStackModal';
+import TechWheelAnimation from '../components/home/TechWheelAnimation';
 import { featuredProjects } from '../data/featuredProjects';
 
 const HomePage = () => {
@@ -15,31 +16,22 @@ const HomePage = () => {
       <TechStackModal isOpen={isTechStackModalOpen} onClose={() => setIsTechStackModalOpen(false)} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
+      <section className="bg-gradient-to-r from-primary-600 to-primary-400 text-white py-20 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Welcome to My Portfolio
-            </h1>
-            <p className="mt-6 text-xl max-w-2xl mx-auto">
-              I'm a full-stack developer passionate about creating beautiful and functional web applications.
-            </p>
-            <div className="mt-10 flex justify-center items-center gap-x-6">
-              <Link to="/projects" className="btn bg-white text-primary-600 hover:bg-gray-100">
-                View Projects
-              </Link>
-              <button 
-                className="relative group"
-                onClick={() => setIsTechStackModalOpen(true)}
-                aria-label="View Tech Stack"
-              >
-                <div className="absolute -inset-2 rounded-full bg-yellow-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300 group-hover:animate-pulse"></div>
-                <div className="relative p-3 bg-white text-primary-600 rounded-full transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-              </button>
+          <div className="w-full mx-auto">
+            <div className="flex justify-between items-center w-full">
+              <div className="text-left max-w-2xl pl-0">
+                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+                  Hello, World!
+                </h1>
+                <p className="mt-6 text-xl">
+                  I'm a full-stack developer passionate about creating beautiful and functional web applications.
+                </p>
+              </div>
+              
+              <div className="flex items-center justify-end">
+                <TechWheelAnimation />
+              </div>
             </div>
           </div>
         </div>

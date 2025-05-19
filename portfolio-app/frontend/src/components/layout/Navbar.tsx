@@ -21,7 +21,7 @@ const Navbar = () => {
         setContactDropdownOpen(false);
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -58,6 +58,13 @@ const Navbar = () => {
             <button 
               onClick={() => setContactDropdownOpen(!contactDropdownOpen)}
               onMouseEnter={() => setContactDropdownOpen(true)}
+              onMouseLeave={() => {
+                setTimeout(() => {
+                  if (!dropdownRef.current?.contains(document.activeElement)) {
+                    setContactDropdownOpen(false);
+                  }
+                }, 5000);
+              }}
               className={`group flex items-center font-medium text-gray-600 hover:text-primary-600 focus:outline-none transition-all duration-300 ${contactDropdownOpen ? 'text-primary-600' : ''}`}
               aria-expanded={contactDropdownOpen}
             >
@@ -68,13 +75,10 @@ const Navbar = () => {
                 className={`ml-1 h-4 w-4 transition-transform duration-300 ease-in-out ${
                   contactDropdownOpen 
                     ? 'rotate-180 text-primary-600' 
-                    : 'group-hover:text-primary-600 group-hover:dropdown-arrow-bounce'
+                    : 'group-hover:text-primary-600'
                 }`} 
                 aria-hidden="true" 
               />
-              
-              {/* Hover indicator - pulsing dot */}
-              <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-primary-500 transform scale-0 group-hover:scale-100 transition-transform duration-300 group-hover:animate-ping"></span>
             </button>
 
             {/* Dropdown menu with animation */}
@@ -87,6 +91,8 @@ const Navbar = () => {
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="menu-button"
+              onMouseEnter={() => setContactDropdownOpen(true)}
+              onMouseLeave={() => setContactDropdownOpen(false)}
             >
               <div className="py-1" role="none">
                 {/* LinkedIn Option */}
@@ -94,8 +100,7 @@ const Navbar = () => {
                   href="https://linkedin.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors duration-150 dropdown-item-appear"
-                  style={{ animationDelay: '0.05s' }}
+                  className="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors duration-150"
                 >
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 mr-3 group-hover:scale-110 transition-transform">
                     <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -186,7 +191,7 @@ const Navbar = () => {
                 {item.name}
               </NavLink>
             ))}
-            
+
             {/* Mobile Contact Options */}
             <div className="py-2">
               <div className="font-medium text-primary-600">Contact</div>
@@ -213,7 +218,7 @@ const Navbar = () => {
                 </a>
               </div>
             </div>
-            
+
             <NavLink
               to="/home/login"
               className="block py-2 font-medium text-primary-600"
@@ -228,4 +233,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

@@ -35,7 +35,7 @@ const LoginPage = () => {
         }
       } catch (error) {
         console.error('Login error:', error);
-        setLoginError('Invalid username or password. Use username "admin" with password "admin"');
+        setLoginError('Invalid username or password');
       } finally {
         setIsSubmitting(false);
       }
@@ -111,7 +111,7 @@ const LoginPage = () => {
             )}
             
             <div className="mt-6 text-center text-sm text-gray-500">
-              <p>For testing, use username "admin" and password "admin"</p>
+              <p></p>
             </div>
           </div>
         </div>

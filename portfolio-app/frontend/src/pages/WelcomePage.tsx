@@ -116,9 +116,12 @@ const WelcomePage: React.FC = () => {
             <span className="font-semibold inline-block animate-fade-in-up"
                 style={{ animationDelay: '0.6s', color: '#4f46e5' }}>Bala Subramanyam</span>
             <span className="inline-block animate-fade-in-up font-semibold"
-                style={{ animationDelay: '0.8s' }}>, Full Stack SE/ </span>
+                style={{ animationDelay: '0.8s' }}>, Full Stack SE </span>
+                <span> & </span>
             <span className="inline-block animate-fade-in-up font-semibold"
                 style={{ animationDelay: '1.0s' }}>AI Researcher</span>
+                <br></br>
+                <span>Note: This Website is under construction :)</span>
           </p>
         </div>
       </div>
@@ -128,7 +131,7 @@ const WelcomePage: React.FC = () => {
         <RobotAnimation />
       </div>
       
-      {/* Find out more button */}
+      {/* Check out my portfolio button */}
       <div className="pb-16 pt-4 w-full flex justify-center z-10">
         <Link 
           to="/home" 
@@ -136,7 +139,7 @@ const WelcomePage: React.FC = () => {
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           } transition-all duration-1000 delay-500`}
         >
-          <span className="relative z-10 font-medium">Find Out More</span>
+          <span className="relative z-10 font-medium">Check out my portfolio</span>
           <span className="absolute bottom-0 left-0 h-1 w-0 bg-white rounded-full mb-0 group-hover:w-full group-hover:opacity-70 transition-all duration-500 ease-out"></span>
           <svg 
             className="ml-2 h-5 w-5 transform transition-transform duration-300 group-hover:translate-x-1" 

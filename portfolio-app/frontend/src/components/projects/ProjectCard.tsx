@@ -66,13 +66,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               loading="lazy"
               sandbox="allow-same-origin allow-scripts"
             />
-            {!isHovered && (
-              <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-                <div className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Hover to interact
-                </div>
-              </div>
-            )}
           </div>
         ) : (
           <img
@@ -91,16 +84,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                   href={project.liveUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-full btn bg-primary-600 text-white hover:bg-primary-700 flex justify-center"
+                  className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium transition-all duration-300 hover:shadow-lg hover:from-primary-600 hover:to-primary-700 transform hover:-translate-y-1"
                 >
-                  Go to Website
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                  </svg>
+                  Website
                 </a>
               )}
               <Link 
                 to={`/projects/${project.slug}`} 
-                className="w-full btn bg-white text-primary-600 hover:bg-gray-100 flex justify-center"
+                className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-white text-primary-600 font-medium border border-primary-100 transition-all duration-300 hover:shadow-lg hover:bg-primary-50 transform hover:-translate-y-1"
               >
-                View Details
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+                Source Code
               </Link>
             </div>
           </div>

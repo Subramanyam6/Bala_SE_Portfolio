@@ -42,3 +42,39 @@
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
 }
+
+/* Tech wheel animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateX(0) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0) translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* Modal animation */
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
