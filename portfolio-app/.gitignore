@@ -1,3 +1,43 @@
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Compiled files
+target/
+build/
+dist/
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+logs/
+*.log
+
+# Docker environment files
+docker-compose.override.yml
+
+# Application properties with secrets
+src/main/resources/application-local.properties
+src/main/resources/application-dev.properties
+
+# Test files
+test-sql.sh
+test-sql-docker.sh
+TestSqlConnection.java
+TestMssqlConnection.java
+
+# Other sensitive files
+*.pem
+*.key
+*.p12
+*.jks
+
 # Backend
 backend/target/
 backend/.mvn/
@@ -25,22 +65,6 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
-# IDE
-.idea/
-.vscode/
-*.iml
-*.ipr
-*.iws
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
 # OS
 .DS_Store
-Thumbs.db
-
-# Docker
-.env
-docker-compose.override.yml 
+Thumbs.db 
