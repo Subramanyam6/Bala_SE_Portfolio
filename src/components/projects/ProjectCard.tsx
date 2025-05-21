@@ -26,13 +26,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
   const isMultiAgentRLWar = project.slug === 'multi-agent-rl-war';
+  const isLiteratureReview = project.hasPdf;
   const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/600x400?text=No+Image';
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
+        setIsInView(true);
         observer.disconnect();
       }
     }, { threshold: 0.1 });

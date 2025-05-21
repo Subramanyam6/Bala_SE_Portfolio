@@ -6,7 +6,9 @@ export const featuredProjects = [
     description: 'A platform for buying and selling heavy machinery with secure transactions and vendor verification.',
     thumbnail: 'https://via.placeholder.com/600x400',
     technologies: ['ASP.NET Core MVC', 'Entity Framework', 'SQL Server', 'Azure', 'Docker'],
-    liveUrl: 'https://miniequipmarketplace-factgzd7cpeabne8.canadacentral-01.azurewebsites.net'
+    liveUrl: 'https://miniequipmarketplace-factgzd7cpeabne8.canadacentral-01.azurewebsites.net',
+    hasPdf: false,
+    pdfPath: ''
   },
   {
     id: 2,
@@ -15,7 +17,9 @@ export const featuredProjects = [
     description: 'A browser-based interactive simulation of multi-agent reinforcement learning in a war scenario. Configure agents, run real-time combat, and visualize evolving strategies. Made with ❤️ by Bala Subramanyam.',
     thumbnail: 'https://via.placeholder.com/600x400',
     technologies: ['Python', 'TensorFlow', 'PyTorch', 'OpenAI Gym'],
-    liveUrl: 'https://warsimulation.azurewebsites.net'
+    liveUrl: 'https://warsimulation.azurewebsites.net',
+    hasPdf: false,
+    pdfPath: ''
   },
   {
     id: 3,

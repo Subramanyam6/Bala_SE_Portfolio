@@ -29,8 +29,12 @@ import {
   SiScikitlearn
 } from 'react-icons/si';
 
+interface IconProps {
+  className?: string;
+  color?: string;
+}
 
-const iconMap: Record<string, React.ComponentType> = {
+const iconMap: Record<string, React.ComponentType<IconProps>> = {
   'Java (Spring Boot)': SiJava,
   'Python (Flask/Django)': SiPython,
   'SQL': SiMysql,
@@ -84,16 +88,6 @@ const colorMap: Record<string, string> = {
   'Pandas': '#150458',
   'NumPy': '#013243',
   'Scikit-learn': '#F7931E',
-};
-
-const tooltipVariants = {
-  hidden: { opacity: 0, y: 0 },
-  visible: { opacity: 1, y: -10, transition: { duration: 0.2 } }
-};
-
-const textVariants = {
-  hidden: { opacity: 0, y: 0 },
-  visible: { opacity: 1, y: -12, transition: { duration: 0.3, type: 'spring' } }
 };
 
 const skills = [
