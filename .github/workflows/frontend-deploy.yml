@@ -12,12 +12,14 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: portfolio-app/frontend/package-lock.json
         
     - name: Install dependencies
       run: cd portfolio-app/frontend && npm ci
@@ -31,8 +33,7 @@ jobs:
         azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         action: "upload"
-        app_location: "portfolio-app/frontend"  # Location where staticwebapp.config.json is found
-        api_location: ""  # No Azure Functions
-        output_location: "dist"  # Relative to app_location
-        config_file_location: "portfolio-app/frontend" # Location of staticwebapp.config.json
+        app_location: "portfolio-app/frontend"
+        api_location: ""
+        output_location: "dist"
         skip_deploy_on_missing_secrets: true 
