@@ -114,12 +114,12 @@ const WelcomePage: React.FC = () => {
                 style={{ animationDelay: '0.4s' }}>I'm</span>
                 <span> </span>
             <span className="font-semibold inline-block animate-fade-in-up"
-                style={{ animationDelay: '0.6s', color: '#4f46e5' }}>Bala Subramanyam</span>
+                style={{ animationDelay: '0.6s', color: '#4f46e5' }}>Bala Subramanyam<span className="font-normal">, </span></span>
             <span className="inline-block animate-fade-in-up font-semibold"
-                style={{ animationDelay: '0.8s' }}>, Full Stack SE </span>
+                style={{ animationDelay: '0.8s' }}><span className="font-normal"> a </span>Full Stack Software Engineer </span>
                 <span> & </span>
             <span className="inline-block animate-fade-in-up font-semibold"
-                style={{ animationDelay: '1.0s' }}>AI Researcher</span>
+                style={{ animationDelay: '1.0s' }}> <span className="font-normal"> an </span> AI Researcher</span>
                 <br></br>
                 <span>Note: This Website is under construction :)</span>
           </p>

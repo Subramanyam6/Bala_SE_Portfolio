@@ -8,6 +8,7 @@ import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/LoginPage';
 import WelcomePage from './pages/WelcomePage';
+import PDFViewerPage from './pages/PDFViewerPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="login" element={<LoginPage />} />
+          <Route path="pdf/:slug" element={<PDFViewerPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

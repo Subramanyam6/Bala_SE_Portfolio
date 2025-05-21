@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Technology {
@@ -14,6 +14,8 @@ interface Project {
   thumbnail: string | null;
   technologies: string[] | Technology[];
   liveUrl?: string;
+  hasPdf: boolean;
+  pdfPath: string;
 }
 
 interface ProjectCardProps {
@@ -23,17 +25,13 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
-
-  // Default placeholder image if thumbnail is null
+  const isMultiAgentRLWar = project.slug === 'multi-agent-rl-war';
   const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/600x400?text=No+Image';
 
-  // Load iframe only when in viewport for better performance
-  const [isInView, setIsInView] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    // Set up intersection observer to detect when card is in viewport
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         setIsInView(true);
@@ -56,13 +54,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative overflow-hidden h-48">
-        {isEquipmentMarketplace && isInView ? (
+        {(isEquipmentMarketplace || isMultiAgentRLWar) ? (
           <div className="w-full h-full relative">
-            <iframe 
+            <iframe
               ref={iframeRef}
-              src="https://miniequipmarketplace-factgzd7cpeabne8.canadacentral-01.azurewebsites.net"
+              src={project.liveUrl}
               className="w-full h-full border-0"
-              title="Equipment Marketplace Live Demo"
+              title={project.title + ' Live Demo'}
               loading="lazy"
               sandbox="allow-same-origin allow-scripts"
             />

@@ -12,18 +12,19 @@ export const featuredProjects = [
     id: 2,
     title: 'Multi-Agent RL War',
     slug: 'multi-agent-rl-war',
-    description: 'A reinforcement learning simulation with multiple agents competing in a war-like environment.',
+    description: 'A browser-based interactive simulation of multi-agent reinforcement learning in a war scenario. Configure agents, run real-time combat, and visualize evolving strategies. Made with ❤️ by Bala Subramanyam.',
     thumbnail: 'https://via.placeholder.com/600x400',
     technologies: ['Python', 'TensorFlow', 'PyTorch', 'OpenAI Gym'],
-    liveUrl: '#'
+    liveUrl: 'https://warsimulation.azurewebsites.net'
   },
   {
     id: 3,
-    title: 'Public Resources Accessibility Map of USA',
-    slug: 'public-resources-map',
-    description: 'An interactive map showing accessibility to public resources across the United States.',
-    thumbnail: 'https://via.placeholder.com/600x400',
-    technologies: ['JavaScript', 'Mapbox API', 'D3.js', 'Node.js'],
-    liveUrl: '#'
+    title: 'A Literature Review on RL in Single & Multi-Agent Systems, its Scalability, and Applications',
+    slug: 'literature-review-rl-mas',
+    description: 'A comprehensive literature review on reinforcement learning in single and multi-agent systems, focusing on scalability and real-world applications.',
+    thumbnail: 'https://via.placeholder.com/600x400?text=Literature+Review',
+    technologies: ['PDF', 'Research', 'RL', 'Multi-Agent Systems'],
+    pdfPath: '/Literature Review Document.pdf',
+    hasPdf: true
   },
 ]; 

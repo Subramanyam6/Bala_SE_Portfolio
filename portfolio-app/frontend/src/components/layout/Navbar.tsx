@@ -112,20 +112,21 @@ const Navbar = () => {
 
                 {/* Email Option with Tooltip */}
                 <div className="relative">
-                  <a 
-                    href="mailto:bduggirala2@huskers.unl.edu"
+                  <Link 
+                    to="/home/contact"
                     className="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors duration-150 dropdown-item-appear"
                     style={{ animationDelay: '0.1s' }}
                     onMouseEnter={() => setEmailTooltipVisible(true)}
                     onMouseLeave={() => setEmailTooltipVisible(false)}
+                    onClick={() => setContactDropdownOpen(false)}
                   >
                     <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 mr-3 group-hover:scale-110 transition-transform">
                       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-150">Email</span>
-                  </a>
+                    <span className="group-hover:translate-x-1 transition-transform duration-150">Contact Form</span>
+                  </Link>
 
                   {/* Tooltip */}
                   <div 
@@ -207,15 +208,16 @@ const Navbar = () => {
                   </svg>
                   LinkedIn
                 </a>
-                <a 
-                  href="mailto:bduggirala2@huskers.unl.edu" 
+                <Link 
+                  to="/home/contact"
                   className="flex items-center py-1 text-sm text-gray-600 hover:text-primary-600"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  Email
-                </a>
+                  Contact Form
+                </Link>
               </div>
             </div>
 

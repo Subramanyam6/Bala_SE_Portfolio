@@ -45,7 +45,7 @@ const RobotAnimation: React.FC = () => {
     
     // Create camera with adjusted position for better viewing angle
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 1.8, 7.0); // Positioned to fit the vertical layout
+    camera.position.set(0, 1.5, 7.0); // Positioned to fit the vertical layout
     
     // Set up renderer with proper size
     const containerWidth = containerRef.current.clientWidth;
@@ -55,6 +55,8 @@ const RobotAnimation: React.FC = () => {
       antialias: true,
       alpha: true // Allow transparent background if needed
     });
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for better performance
     renderer.setSize(containerWidth, containerHeight);
     
@@ -78,7 +80,20 @@ const RobotAnimation: React.FC = () => {
     scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2.2));
     const dl = new THREE.DirectionalLight(0xffffff, 2.2);
     dl.position.set(5, 10, 7);
+    dl.castShadow = true;
     scene.add(dl);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    fillLight.position.set(-5, 5, -5);
+    scene.add(fillLight);
+
+    const planeGeo = new THREE.PlaneGeometry(200, 200);
+    const planeMat = new THREE.ShadowMaterial({ opacity: 0.2 });
+    const plane = new THREE.Mesh(planeGeo, planeMat);
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = 0;
+    plane.receiveShadow = true;
+    scene.add(plane);
     
     // Update grid to be more subtle on white background
     const grid = new THREE.GridHelper(20, 20, 0x00ffff, 0x00ffff);
@@ -86,6 +101,7 @@ const RobotAnimation: React.FC = () => {
     gridMaterial.opacity = 0.5;
     gridMaterial.transparent = true;
     scene.add(grid);
+    (grid.material as THREE.Material).color = new THREE.Color(0x888888);
 
     // Controls with adjusted settings
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -94,6 +110,8 @@ const RobotAnimation: React.FC = () => {
     controls.maxDistance = 10;   // Allows zooming out further
     controls.target.set(0, 0.5, 0); // Target at robot's center
     controls.update();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.3;
 
     // Interaction helpers
     const mouse = new THREE.Vector2();
@@ -178,6 +196,12 @@ const RobotAnimation: React.FC = () => {
         robot.position.y = -0.5;         // Position to fit in the container
         
         scene.add(robot);
+        robot.traverse((obj) => {
+          if ((obj as THREE.Mesh).isMesh) {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+          }
+        });
   
         mixer = new THREE.AnimationMixer(robot);
         
@@ -227,6 +251,8 @@ const RobotAnimation: React.FC = () => {
       
       const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       cube.position.y = 0.8; // Position at center of grid
+      cube.castShadow = true;
+      cube.receiveShadow = true;
       scene.add(cube);
       
       // Add a head
@@ -240,6 +266,8 @@ const RobotAnimation: React.FC = () => {
       });
       const head = new THREE.Mesh(headGeometry, headMaterial);
       head.position.y = 1.8;
+      head.castShadow = true;
+      head.receiveShadow = true;
       scene.add(head);
       
       // Add arms
@@ -248,10 +276,14 @@ const RobotAnimation: React.FC = () => {
       
       const leftArm = new THREE.Mesh(armGeometry, armMaterial);
       leftArm.position.set(-0.5, 1.2, 0);
+      leftArm.castShadow = true;
+      leftArm.receiveShadow = true;
       scene.add(leftArm);
       
       const rightArm = new THREE.Mesh(armGeometry, armMaterial);
       rightArm.position.set(0.5, 1.2, 0);
+      rightArm.castShadow = true;
+      rightArm.receiveShadow = true;
       scene.add(rightArm);
       
       // Simple animation for the fallback cube
@@ -337,6 +369,10 @@ const RobotAnimation: React.FC = () => {
           isRotating = false;
           robotModel.rotation.y = 0;
         }
+      }
+
+      if (robotModel) {
+        robotModel.position.y = -0.5 + Math.sin(clock.elapsedTime * 0.5) * 0.05;
       }
 
       ray.setFromCamera(mouse, camera);
