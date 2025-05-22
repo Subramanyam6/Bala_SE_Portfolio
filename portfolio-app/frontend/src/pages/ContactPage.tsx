@@ -3,6 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { EnvelopeIcon, PhoneIcon, MapPinIcon, UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -50,7 +52,7 @@ const ContactPage = () => {
 
         console.log('Submitting form with values:', messageData);
 
-        const response = await fetch('/api/contact/send', {
+        const response = await fetch(`${API_BASE_URL}/api/contact/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
