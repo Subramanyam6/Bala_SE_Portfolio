@@ -60,11 +60,19 @@ const ContactPage = () => {
           body: JSON.stringify(messageData),
         });
 
-        const responseData = await response.json();
+        // Parse response text, handle JSON or plain text
+        const raw = await response.text();
+        let responseData: any = {};
+        try {
+          responseData = JSON.parse(raw);
+        } catch {
+          // response was not valid JSON
+        }
         console.log('Server response:', responseData);
-        
+
         if (!response.ok) {
-          throw new Error(responseData.error || responseData.message || 'Failed to send message');
+          // If JSON has error/message use it, otherwise throw the raw text
+          throw new Error(responseData.error || responseData.message || raw || 'Failed to send message');
         }
 
         setSubmitSuccess(true);
