@@ -3,7 +3,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { EnvelopeIcon, PhoneIcon, MapPinIcon, UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://portfolio-api-app-fnhrghefdkahakdn.canadacentral-01.azurewebsites.net';
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
