@@ -308,7 +308,7 @@ const AboutPage = () => {
                 Full-Stack Software Engineer with expertise in developing cloud-native microservices, RESTful APIs, and event-driven systems using Java (Spring Boot), Python (Flask), and AWS/GCP infrastructure. Proven track record in designing scalable, maintainable services, optimizing performance, and collaborating cross-functionally to deliver reliable production software.
               </motion.p>
               <div className="flex flex-wrap gap-4 mt-2">
-                {socialLinks.map((link, idx) => (
+                {socialLinks.map((link) => (
                   <motion.a
                     key={link.name}
                     href={link.url}
