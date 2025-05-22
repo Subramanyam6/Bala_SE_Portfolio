@@ -30,7 +30,10 @@ public class ContactController {
     @PostMapping("/send")
     public ResponseEntity<?> sendContactEmail(@RequestBody ContactFormDto contactForm) {
         try {
-            // Log incoming request
+            // Log incoming request and configuration
+            System.out.println("Starting email send process...");
+            System.out.println("From email configured as: " + fromEmail);
+            System.out.println("SendGrid API key length: " + (sendgridApiKey != null ? sendgridApiKey.length() : "null"));
             System.out.println("Received contact form submission: " + contactForm.toString());
             
             // Validate required fields
@@ -94,6 +97,7 @@ public class ContactController {
             System.out.println("Sending email to SendGrid...");
             Response response = sg.api(request);
             System.out.println("SendGrid response status code: " + response.getStatusCode());
+            System.out.println("SendGrid response headers: " + response.getHeaders());
             
             if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
                 System.out.println("Email sent successfully");
@@ -101,9 +105,9 @@ public class ContactController {
                 successResponse.put("message", "Message sent successfully");
                 return ResponseEntity.ok(successResponse);
             } else {
-                System.out.println("SendGrid error: " + response.getBody());
+                System.out.println("SendGrid error response body: " + response.getBody());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("error", "Failed to send email: " + response.getBody()));
+                        .body(Map.of("error", "Failed to send email. Status code: " + response.getStatusCode()));
             }
         } catch (IOException e) {
             System.err.println("Error sending email: " + e.getMessage());
