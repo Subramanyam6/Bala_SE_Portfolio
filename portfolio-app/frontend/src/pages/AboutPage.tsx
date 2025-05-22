@@ -268,43 +268,9 @@ const sectionVariants = {
   })
 };
 
-const skillIconVariants = {
-  hidden: { opacity: 0, scale: 0.5, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 200,
-      damping: 10
-    }
-  },
-  hover: {
-    scale: 1.2,
-    rotate: [0, -10, 10, -10, 0],
-    transition: {
-      duration: 0.3,
-      type: 'spring',
-      stiffness: 300
-    }
-  }
-};
-
-const skillGroupVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-};
-
 const AboutPage = () => {
   return (
-    <div className="bg-gray-50 min-h-screen py-12 overflow-x-hidden">
+    <div className="bg-gray-100 min-h-screen">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header/Profile */}

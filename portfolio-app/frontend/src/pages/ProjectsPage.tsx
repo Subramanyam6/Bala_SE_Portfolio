@@ -12,6 +12,8 @@ interface Project {
   thumbnail: string | null;
   technologies: string[];
   liveUrl?: string;
+  hasPdf: boolean;
+  pdfPath: string;
 }
 
 const ProjectsPage = () => {
@@ -37,7 +39,9 @@ const ProjectsPage = () => {
             description: "A personal portfolio website showcasing my skills and projects",
             thumbnail: "https://via.placeholder.com/800x600",
             technologies: ["React", "TypeScript", "Tailwind CSS"],
-            liveUrl: "#"
+            liveUrl: "#",
+            hasPdf: false,
+            pdfPath: ""
           },
           {
             id: 102,
@@ -46,7 +50,9 @@ const ProjectsPage = () => {
             description: "A full-featured e-commerce platform with product management and checkout",
             thumbnail: "https://via.placeholder.com/800x600",
             technologies: ["React", "Node.js", "MongoDB", "Express"],
-            liveUrl: "#"
+            liveUrl: "#",
+            hasPdf: false,
+            pdfPath: ""
           },
           {
             id: 103,
@@ -55,7 +61,9 @@ const ProjectsPage = () => {
             description: "A project management tool for tracking tasks and team collaboration",
             thumbnail: "https://via.placeholder.com/800x600",
             technologies: ["Vue.js", "Firebase", "Tailwind CSS"],
-            liveUrl: "#"
+            liveUrl: "#",
+            hasPdf: false,
+            pdfPath: ""
           }
         ];
 
