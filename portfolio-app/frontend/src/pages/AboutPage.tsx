@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { type ComponentType } from 'react';
 
 import {
   SiOpenjdk as SiJava,
@@ -34,7 +35,7 @@ interface IconProps {
   color?: string;
 }
 
-const iconMap: Record<string, React.ComponentType<IconProps>> = {
+const iconMap: Record<string, ComponentType<IconProps>> = {
   'Java (Spring Boot)': SiJava,
   'Python (Flask/Django)': SiPython,
   'SQL': SiMysql,
@@ -202,33 +203,6 @@ const education = [
     date: 'Aug 2013 – May 2017',
     details: '',
   },
-];
-
-const projects = [
-  {
-    name: 'Mini Equipment Marketplace',
-    desc: 'Built using ASP.NET Core MVC, Entity Framework Core (SQL Server), RESTful APIs, and CI/CD via Azure DevOps.',
-    link: '',
-    hasPdf: false,
-    pdfPath: '',
-    liveUrl: ''
-  },
-  {
-    name: 'Ethereum DApp Backend',
-    desc: 'Developed with Solidity and Truffle Suite—authoring and testing smart contracts and deploying them on AWS EC2 for secure on-chain business logic.',
-    link: 'https://github.com/Subramanyam6',
-    hasPdf: false,
-    pdfPath: '',
-    liveUrl: ''
-  },
-  {
-    name: 'Multi-Agent RL War',
-    desc: 'A live site for the Multi-Agent RL War game',
-    link: 'https://multi-agent-rl-war.web.app',
-    hasPdf: false,
-    pdfPath: '',
-    liveUrl: 'https://multi-agent-rl-war.web.app'
-  }
 ];
 
 const socialLinks = [
