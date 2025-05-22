@@ -211,7 +211,7 @@ const projects = [
     link: '',
     hasPdf: false,
     pdfPath: '',
-    liveUrl: '',
+    liveUrl: ''
   },
   {
     name: 'Ethereum DApp Backend',
@@ -219,7 +219,7 @@ const projects = [
     link: 'https://github.com/Subramanyam6',
     hasPdf: false,
     pdfPath: '',
-    liveUrl: '',
+    liveUrl: ''
   },
   {
     name: 'Multi-Agent RL War',
@@ -227,8 +227,8 @@ const projects = [
     link: 'https://multi-agent-rl-war.web.app',
     hasPdf: false,
     pdfPath: '',
-    liveUrl: 'https://multi-agent-rl-war.web.app',
-  },
+    liveUrl: 'https://multi-agent-rl-war.web.app'
+  }
 ];
 
 const socialLinks = [

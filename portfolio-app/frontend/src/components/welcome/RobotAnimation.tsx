@@ -101,7 +101,9 @@ const RobotAnimation: React.FC = () => {
     gridMaterial.opacity = 0.5;
     gridMaterial.transparent = true;
     scene.add(grid);
-    (grid.material as THREE.Material).color = new THREE.Color(0x888888);
+    if (grid.material instanceof THREE.LineBasicMaterial) {
+      grid.material.color = new THREE.Color(0x888888);
+    }
 
     // Controls with adjusted settings
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -196,7 +198,7 @@ const RobotAnimation: React.FC = () => {
         robot.position.y = -0.5;         // Position to fit in the container
         
         scene.add(robot);
-        robot.traverse((obj) => {
+        robot.traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).isMesh) {
             obj.castShadow = true;
             obj.receiveShadow = true;
