@@ -8,7 +8,10 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +22,32 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contact")
+@CrossOrigin(origins = "${cors.allowed-origins}", allowCredentials = "true")
 public class ContactController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
+    private static final String DUMMY_KEY = "dummy-key-for-development";
 
     @Value("${sendgrid.api.key}")
     private String sendgridApiKey;
 
     @Value("${sendgrid.from.email}")
     private String fromEmail;
+    
+    private final Environment environment;
+    
+    public ContactController(Environment environment) {
+        this.environment = environment;
+    }
 
     @PostMapping("/send")
     public ResponseEntity<?> sendContactEmail(@RequestBody ContactFormDto contactForm) {
         try {
             // Log incoming request and configuration
-            System.out.println("Starting email send process...");
-            System.out.println("From email configured as: " + fromEmail);
-            System.out.println("SendGrid API key length: " + (sendgridApiKey != null ? sendgridApiKey.length() : "null"));
-            System.out.println("Received contact form submission: " + contactForm.toString());
+            logger.info("Starting email send process...");
+            logger.debug("From email configured as: {}", fromEmail);
+            logger.debug("SendGrid API key present: {}", sendgridApiKey != null);
+            logger.info("Received contact form submission from: {}", contactForm.getName());
             
             // Validate required fields
             if (contactForm.getName() == null || contactForm.getName().trim().isEmpty()) {
@@ -50,9 +63,20 @@ public class ContactController {
                 return ResponseEntity.badRequest().body(Map.of("error", "Email is required when requesting a reply"));
             }
 
+            // Check if we're in development mode with dummy key
+            if (DUMMY_KEY.equals(sendgridApiKey)) {
+                logger.warn("Running in development mode with dummy SendGrid key. Email will not be sent.");
+                logger.info("Would have sent email with content: Subject='{}', To='{}', From='{}'", 
+                    contactForm.getSubject(), "bduggirala2@huskers.unl.edu", fromEmail);
+                return ResponseEntity.ok(Map.of(
+                    "message", "Message logged (development mode - email not sent)",
+                    "development_mode", true
+                ));
+            }
+
             // Create the SendGrid email
             Email from = new Email(fromEmail);
-            Email to = new Email("bduggirala2@huskers.unl.edu"); // Hardcode the recipient email for security
+            Email to = new Email("bduggirala2@huskers.unl.edu");
             String subject = "[Portfolio Contact] " + contactForm.getSubject();
             
             // Format the email content
@@ -94,29 +118,27 @@ public class ContactController {
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
             
-            System.out.println("Sending email to SendGrid...");
+            logger.info("Sending email to SendGrid...");
             Response response = sg.api(request);
-            System.out.println("SendGrid response status code: " + response.getStatusCode());
-            System.out.println("SendGrid response headers: " + response.getHeaders());
+            logger.info("SendGrid response status code: {}", response.getStatusCode());
+            logger.debug("SendGrid response headers: {}", response.getHeaders());
             
             if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
-                System.out.println("Email sent successfully");
+                logger.info("Email sent successfully");
                 Map<String, String> successResponse = new HashMap<>();
                 successResponse.put("message", "Message sent successfully");
                 return ResponseEntity.ok(successResponse);
             } else {
-                System.out.println("SendGrid error response body: " + response.getBody());
+                logger.error("SendGrid error response body: {}", response.getBody());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(Map.of("error", "Failed to send email. Status code: " + response.getStatusCode()));
             }
         } catch (IOException e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error sending email: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Failed to send email: " + e.getMessage()));
         } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Unexpected error: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "An unexpected error occurred: " + e.getMessage()));
         }

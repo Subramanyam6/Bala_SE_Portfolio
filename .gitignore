@@ -43,4 +43,31 @@ Thumbs.db
 
 # Docker
 .env
-docker-compose.override.yml 
+docker-compose.override.yml
+
+# Test files and scripts
+test-sql*.sh
+Test*Connection.java
+Test*Connection.class
+
+# Personal documents (should not be in repo)
+*.pdf
+*.docx
+*.doc
+*.ppt
+*.pptx
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build artifacts
+target/
+build/
+dist/
+out/
+
+# Environment files
+.env*
+!.env.example 
