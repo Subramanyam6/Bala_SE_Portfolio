@@ -33,7 +33,7 @@ const RobotAnimation: React.FC = () => {
     
     // Check if WebGL is available
     if (!webglAvailable()) {
-      setError('❌ WebGL unavailable in this browser.');
+      setError('😞 WebGL isn’t supported here. Try Chrome, Firefox, or Safari on desktop.');
       return;
     }
     
@@ -41,15 +41,17 @@ const RobotAnimation: React.FC = () => {
     
     // Scene / camera / renderer setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff); // Set background to white to match the page
     
-    // Create camera with adjusted position for better viewing angle
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 1.5, 7.0); // Positioned to fit the vertical layout
+    // Create camera with adjusted position for compact view
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 1.5, 5.0); // Closer position for smaller container
     
-    // Set up renderer with proper size
+    // Set up renderer with proper size - constrained to container
     const containerWidth = containerRef.current.clientWidth;
     const containerHeight = containerRef.current.clientHeight;
+    // Sync camera aspect to container
+    camera.aspect = containerWidth / containerHeight;
+    camera.updateProjectionMatrix();
     
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true,
@@ -87,7 +89,7 @@ const RobotAnimation: React.FC = () => {
     fillLight.position.set(-5, 5, -5);
     scene.add(fillLight);
 
-    const planeGeo = new THREE.PlaneGeometry(200, 200);
+    const planeGeo = new THREE.PlaneGeometry(50, 50); // Just enough for shadow without grid
     const planeMat = new THREE.ShadowMaterial({ opacity: 0.2 });
     const plane = new THREE.Mesh(planeGeo, planeMat);
     plane.rotation.x = -Math.PI / 2;
@@ -95,25 +97,17 @@ const RobotAnimation: React.FC = () => {
     plane.receiveShadow = true;
     scene.add(plane);
     
-    // Update grid to be more subtle on white background
-    const grid = new THREE.GridHelper(20, 20, 0x00ffff, 0x00ffff);
-    const gridMaterial = grid.material as THREE.Material;
-    gridMaterial.opacity = 0.5;
-    gridMaterial.transparent = true;
-    scene.add(grid);
-    if (grid.material instanceof THREE.LineBasicMaterial) {
-      grid.material.color = new THREE.Color(0x888888);
-    }
+    // Grid removed - only keeping the shadow plane
 
-    // Controls with adjusted settings
+    // Controls with adjusted settings for compact view
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
-    controls.minDistance = 3;    // Prevents zooming in too close
-    controls.maxDistance = 10;   // Allows zooming out further
-    controls.target.set(0, 0.5, 0); // Target at robot's center
+    controls.minDistance = 2;    // Closer minimum for compact space
+    controls.maxDistance = 8;    // Reasonable maximum for small container
+    controls.target.set(0, 1.5, -2.0); // Target at robot's center
     controls.update();
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.3;
+    controls.autoRotateSpeed = 0.4; // Slightly faster for more dynamic feel
 
     // Interaction helpers
     const mouse = new THREE.Vector2();
@@ -131,7 +125,7 @@ const RobotAnimation: React.FC = () => {
     const loadModel = (urlIndex: number) => {
       if (urlIndex >= MODEL_URLS.length) {
         fallbackCube();
-        setError('Robot model failed to load after trying all available URLs. Using fallback cube.');
+        setError('⚠️ Model load failed—displaying a stylized placeholder instead.');
         return;
       }
 
@@ -193,9 +187,9 @@ const RobotAnimation: React.FC = () => {
         const robot = gltf.scene;
         robotModel = robot;
         
-        // Position and scale adjustments to ensure visibility
-        robot.scale.set(0.6, 0.9, 0.6);  // Smaller scale for vertical layout
-        robot.position.y = -0.5;         // Position to fit in the container
+        // Position and scale adjustments for compact space next to text
+        robot.scale.set(0.8, 0.8, 0.8);  // Slightly larger scale for better visibility in compact space
+        robot.position.y = 0;            // Center position for compact container
         
         scene.add(robot);
         robot.traverse((obj: THREE.Object3D) => {
@@ -252,7 +246,7 @@ const RobotAnimation: React.FC = () => {
       });
       
       const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.position.y = 0.8; // Position at center of grid
+      cube.position.y = 0.8; // Position at center
       cube.castShadow = true;
       cube.receiveShadow = true;
       scene.add(cube);
@@ -307,7 +301,7 @@ const RobotAnimation: React.FC = () => {
     const handleResize = () => {
       if (!containerRef.current) return;
 
-      // Use container dimensions instead of window
+      // Use container dimensions for compact view
       const containerWidth = containerRef.current.clientWidth;
       const containerHeight = containerRef.current.clientHeight;
       
@@ -374,7 +368,7 @@ const RobotAnimation: React.FC = () => {
       }
 
       if (robotModel) {
-        robotModel.position.y = -0.5 + Math.sin(clock.elapsedTime * 0.5) * 0.05;
+        robotModel.position.y = 0 + Math.sin(clock.elapsedTime * 0.5) * 0.08; // Slightly more float for visual appeal
       }
 
       ray.setFromCamera(mouse, camera);
@@ -425,22 +419,32 @@ const RobotAnimation: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full relative">
+    <div className="h-full w-full relative overflow-hidden">
+      {/* Enhanced gradient background that matches the website design */}
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 70%)'
+        }}
+      />
+      
       <div 
         ref={containerRef} 
-        className="absolute inset-0" 
-        style={{ height: "min(60vh, 500px)" }} // Limit height for better vertical layout
+        className="absolute inset-0 rounded-2xl overflow-hidden" 
+        style={{ width: '100%', height: '100%' }} // Fill the container provided by parent
       />
       
       {error && (
-        <div className="absolute bottom-16 w-full text-center">
-          <div className="inline-block bg-black bg-opacity-70 text-red-300 p-3 rounded-lg">
-            <p>{error}</p>
-            <button 
+        <div className="absolute bottom-16 w-full flex justify-center px-4">
+          <div className="max-w-md w-full bg-red-50 border-l-4 border-red-400 text-red-700 p-4 rounded-lg shadow-md flex items-start space-x-3">
+            <p className="font-medium text-xl text-gray-900 tracking-wide animate-pulse">
+              {error}
+            </p>
+            <button
               onClick={handleRetryLoad}
-              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              className="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform duration-300 ease-in-out transform hover:scale-105 animate-bounce"
             >
-              Try Another Source
+              Retry Model
             </button>
           </div>
         </div>
