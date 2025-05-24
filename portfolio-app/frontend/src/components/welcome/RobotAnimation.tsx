@@ -85,7 +85,7 @@ const RobotAnimation: React.FC = () => {
     dl.castShadow = true;
     scene.add(dl);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 5.5);
     fillLight.position.set(-5, 5, -5);
     scene.add(fillLight);
 

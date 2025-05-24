@@ -1,5 +1,10 @@
+declare global {
+  interface Window {
+    popupTimeoutRef?: ReturnType<typeof setTimeout>;
+  }
+}
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import RobotAnimation from '../components/welcome/RobotAnimation';
 import Particles from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
@@ -57,37 +62,121 @@ const GreetingTransition: React.FC<{ loaded: boolean }> = ({ loaded }) => {
     { text: 'नमस्ते', lang: 'Hindi' },
     { text: 'నమస్తే', lang: 'Telugu' }
   ];
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  
+
   useEffect(() => {
     if (!loaded) return;
-    
+
     const interval = setInterval(() => {
       setIsVisible(false);
-      
+
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % greetings.length);
         setIsVisible(true);
-      }, 500); // Half second for fade out
-      
+      }, 300); // Faster, smoother transition
+
     }, 3000); // Change every 3 seconds
-    
+
     return () => clearInterval(interval);
   }, [loaded, greetings.length]);
-  
+
   return (
-    <span 
-      className={`transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+    <span
+      className={`transition-opacity duration-300 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      style={{
+        transitionTimingFunction: 'ease-in-out'
+      }}
     >
       {greetings[currentIndex].text}
     </span>
   );
 };
 
+// Contact Popup Component
+const ContactPopup: React.FC<{ isVisible: boolean; onClose: () => void; position: { x: number; y: number }; setShowCopyBanner: (show: boolean) => void }> = ({
+  isVisible,
+  onClose,
+  position,
+  setShowCopyBanner,
+}) => {
+  const navigate = useNavigate();
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText('bduggirala2@huskers.unl.edu');
+      setShowCopyBanner(true);
+      setTimeout(() => setShowCopyBanner(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+    onClose();
+  };
+
+  const goToContact = () => {
+    navigate('/home/contact');
+    onClose();
+  };
+
+  if (!isVisible) return null;
+
+  return (
+    <div
+      className="fixed z-50 bg-white/90 rounded-2xl shadow-xl border border-gray-300 p-4 w-72 backdrop-blur-md transition-all duration-300"
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        animation: isVisible ? 'popup-appear 0.2s ease-out forwards' : 'popup-disappear 0.2s ease-in forwards',
+      }}
+      onMouseEnter={() => {
+        if (window.popupTimeoutRef) clearTimeout(window.popupTimeoutRef);
+      }}
+      onMouseLeave={() => {
+        window.popupTimeoutRef = setTimeout(() => onClose(), 2000);
+      }}
+    >
+      <div className="space-y-3">
+        <button
+          onClick={goToContact}
+          className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-all duration-150 border border-transparent hover:border-primary-200 group"
+        >
+          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 mr-3 group-hover:scale-110 transition-transform">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </span>
+          <span className="group-hover:translate-x-1 transition-transform duration-150 font-medium">This website can send emails to Bala</span>
+        </button>
+
+        <button
+          onClick={copyEmail}
+          className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-150 border border-transparent hover:border-blue-200 group"
+        >
+          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 mr-3 group-hover:scale-110 transition-transform">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </span>
+          <span className="group-hover:translate-x-1 transition-transform duration-150 font-medium">Or Copy Bala's Email</span>
+        </button>
+      </div>
+
+      {/* Tooltip arrow */}
+      <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 rotate-45 bg-white/90 border border-gray-300 w-4 h-4 shadow-md backdrop-blur-md" />
+    </div>
+  );
+};
+
 const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
+  const [contactPopupVisible, setContactPopupVisible] = useState(false);
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+  const [popupTimeout, setPopupTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [showCopyBanner, setShowCopyBanner] = useState(false);
+
+  const navigate = useNavigate();
+
   const particlesInit = async (engine: Engine) => {
     await loadSlim(engine);
   };
@@ -95,20 +184,78 @@ const WelcomePage: React.FC = () => {
   const particlesLoaded = async () => {
     // Particles loaded successfully
   };
-  
+
   useEffect(() => {
     // Add a small delay for animation purposes
     const timer = setTimeout(() => {
       setLoaded(true);
     }, 300);
-    
+
     return () => clearTimeout(timer);
   }, []);
-  
+
+  const handleContactHover = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setPopupPosition({
+      x: rect.right + 20,
+      y: rect.top + rect.height / 2 - 50,
+    });
+
+    if (popupTimeout) {
+      clearTimeout(popupTimeout);
+    }
+
+    setContactPopupVisible(true);
+  };
+
+  const handleContactLeave = () => {
+    const timeout = setTimeout(() => {
+      setContactPopupVisible(false);
+    }, 300); // Delay before hiding
+    setPopupTimeout(timeout);
+  };
+
+  const closePopup = () => {
+    setContactPopupVisible(false);
+    if (popupTimeout) {
+      clearTimeout(popupTimeout);
+    }
+  };
+
   return (
     <>
       {/* Inject custom styles */}
-      <style dangerouslySetInnerHTML={{ __html: customStyles }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html:
+            customStyles +
+            `
+        @keyframes popup-appear {
+          from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes popup-disappear {
+          from { opacity: 1; transform: translateY(0) scale(1); }
+          to { opacity: 0; transform: translateY(-10px) scale(0.95); }
+        }
+      `,
+        }}
+      />
+
+      {/* Copy banner */}
+      {showCopyBanner && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+          Email copied to clipboard!
+        </div>
+      )}
+
+      {/* Contact Popup */}
+      <ContactPopup
+        isVisible={contactPopupVisible}
+        onClose={closePopup}
+        position={popupPosition}
+        setShowCopyBanner={setShowCopyBanner}
+      />
       
       <div 
         className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-r from-primary-600 to-primary-400 text-white w-screen"
@@ -211,13 +358,13 @@ const WelcomePage: React.FC = () => {
             {/* Namaste Text Section - Perfectly Centered */}
             <div className="text-center mb-8">
               <div className="overflow-hidden">
-                <h1 
-                  className={`glow-animation shimmer-text relative font-black tracking-tight mb-6 bg-gradient-to-r from-white via-primary-100 to-primary-200 bg-clip-text text-transparent opacity-0 transition-all duration-1000 ease-out ${loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}
+                <h1
+                  className={`glow-animation relative font-black tracking-tight mb-6 text-white opacity-0 transition-all duration-1000 ease-out ${loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'} glow-animation z-20`}
                   style={{
                     fontFamily: '"Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
-                    filter: 'drop-shadow(0 0 30px rgba(14, 165, 233, 0.4))',
-                    textShadow: '0 0 40px rgba(14, 165, 233, 0.3)',
-                    fontSize: 'clamp(3rem, 8vw, 8rem)'
+                    textShadow:
+                      '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 1)',
+                    fontSize: 'clamp(3rem, 8vw, 8rem)',
                   }}
                 >
                   <GreetingTransition loaded={loaded} />
@@ -255,7 +402,7 @@ const WelcomePage: React.FC = () => {
               >
                 <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-white via-primary-100 to-primary-200 bg-clip-text text-transparent">
                   I'm <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-primary-300 to-primary-200 bg-clip-text text-transparent font-black">
+                    <span className="text-white font-black">
                       Bala Subramanyam
                     </span>
                     <span className="absolute -right-2 top-0 text-2xl">✨</span>
@@ -277,45 +424,21 @@ const WelcomePage: React.FC = () => {
         
         {/* Modern CTA Section - constrained width */}
         <div className="pb-16 pt-4 w-full flex flex-col items-center z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Multiple Modern Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          {/* Navigation-style Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
             <Link 
-              to="/home" 
-              className={`button-glow group relative inline-flex items-center px-8 py-4 sm:px-10 sm:py-5 rounded-2xl bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-2xl opacity-0 transition-all duration-1000 delay-600 transform hover:scale-105 hover:shadow-primary-500/25 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
-              style={{
-                boxShadow: '0 20px 40px rgba(14, 165, 233, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1) inset'
-              }}
+              to="/home"
+              className={`px-6 py-3 rounded-xl bg-white/90 text-primary-700 font-semibold shadow-md hover:bg-white hover:text-primary-900 transition-all duration-300 text-lg sm:text-xl opacity-0 delay-600 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
             >
-              <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary-400 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-              <span className="relative z-10 text-lg sm:text-xl font-bold tracking-wide">
-                Explore Portfolio
-              </span>
-              <svg 
-                className="ml-3 h-6 w-6 transform transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 20 20" 
-                fill="currentColor"
-              >
-                <path fillRule="evenodd" d="M3 10a1 1 0 011-1h10.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H4a1 1 0 01-1-1z" clipRule="evenodd" />
-              </svg>
+              Explore Portfolio
             </Link>
 
-            <a 
-              href="#contact" 
-              className={`group relative inline-flex items-center px-8 py-4 sm:px-10 sm:py-5 rounded-2xl backdrop-blur-lg bg-white/10 border border-white/20 text-white shadow-xl opacity-0 transition-all duration-1000 delay-700 transform hover:scale-105 hover:bg-white/20 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
+            <a
+              href="#contact"
+              onMouseEnter={handleContactHover}
+              className={`px-6 py-3 rounded-xl bg-white/90 text-primary-700 font-semibold shadow-md hover:bg-white hover:text-primary-900 transition-all duration-300 text-lg sm:text-xl opacity-0 delay-600 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
             >
-              <span className="relative z-10 text-lg sm:text-xl font-semibold tracking-wide">
-                Get In Touch
-              </span>
-              <svg 
-                className="ml-3 h-6 w-6 transform transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 20 20" 
-                fill="currentColor"
-              >
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
+              Get In Touch
             </a>
           </div>
 
@@ -339,16 +462,7 @@ const WelcomePage: React.FC = () => {
               className="group p-3 rounded-full backdrop-blur-lg bg-white/10 border border-white/20 hover:bg-gray-500/20 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-gray-500/25"
             >
               <svg className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-            
-            <a 
-              href="mailto:subramanyam.duggirala@outlook.com"
-              className="group p-3 rounded-full backdrop-blur-lg bg-white/10 border border-white/20 hover:bg-primary-500/20 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary-500/25"
-            >
-              <svg className="w-6 h-6 text-primary-300 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h.749L12 9.5l9.615-5.679h.749c.904 0 1.636.732 1.636 1.636z"/>
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
             </a>
           </div>
