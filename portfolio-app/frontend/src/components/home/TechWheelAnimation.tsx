@@ -1,9 +1,21 @@
 /* ----- TechWheelAnimation.tsx ----- */
 import React, { useState } from 'react';
+import {
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiOpenjdk as SiJava,
+  SiSpring,
+  SiMongodb,
+  SiDocker,
+  SiAmazon as SiAws,
+  SiGithub
+} from 'react-icons/si';
 
 interface Technology {
   name: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string; color?: string }>;
+  color: string;
 }
 
 const TechWheelAnimation: React.FC = () => {
@@ -12,15 +24,15 @@ const TechWheelAnimation: React.FC = () => {
   let hoverTimeout: ReturnType<typeof setTimeout>;
   // Technology data with icons and names
   const technologies: Technology[] = [
-    { name: 'React', icon: '⚛️' },
-    { name: 'TypeScript', icon: '🟦' },
-    { name: 'Tailwind CSS', icon: '🌬️' },
-    { name: 'Java', icon: '☕' },
-    { name: 'Spring', icon: '🌱' },
-    { name: 'MongoDB', icon: '🍃' },
-    { name: 'Docker', icon: '🐳' },
-    { name: 'AWS', icon: '☁️' },
-    { name: 'GitHub', icon: '🐙' }
+    { name: 'React', icon: SiReact, color: '#61DAFB' },
+    { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#06B6D4' },
+    { name: 'Java', icon: SiJava, color: '#007396' },
+    { name: 'Spring', icon: SiSpring, color: '#6DB33F' },
+    { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
+    { name: 'Docker', icon: SiDocker, color: '#2496ED' },
+    { name: 'AWS', icon: SiAws, color: '#FF9900' },
+    { name: 'GitHub', icon: SiGithub, color: '#181717' }
   ];
 
   return (
@@ -79,7 +91,7 @@ const TechWheelAnimation: React.FC = () => {
                   }}
                 >
                   <div className="flex flex-col items-center relative">
-                    <span className="text-lg">{tech.icon}</span>
+                    <tech.icon className="text-lg" color={tech.color} />
                     {/* Tooltip */}
                     <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 whitespace-nowrap z-10">
                       <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>

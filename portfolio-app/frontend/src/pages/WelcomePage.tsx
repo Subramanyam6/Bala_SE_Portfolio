@@ -172,10 +172,7 @@ const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
   const [contactPopupVisible, setContactPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
-  const [popupTimeout, setPopupTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [showCopyBanner, setShowCopyBanner] = useState(false);
-
-  const navigate = useNavigate();
 
   const particlesInit = async (engine: Engine) => {
     await loadSlim(engine);
@@ -201,24 +198,17 @@ const WelcomePage: React.FC = () => {
       y: rect.top + rect.height / 2 - 50,
     });
 
-    if (popupTimeout) {
-      clearTimeout(popupTimeout);
+    if (window.popupTimeoutRef) {
+      clearTimeout(window.popupTimeoutRef);
     }
 
     setContactPopupVisible(true);
   };
 
-  const handleContactLeave = () => {
-    const timeout = setTimeout(() => {
-      setContactPopupVisible(false);
-    }, 300); // Delay before hiding
-    setPopupTimeout(timeout);
-  };
-
   const closePopup = () => {
     setContactPopupVisible(false);
-    if (popupTimeout) {
-      clearTimeout(popupTimeout);
+    if (window.popupTimeoutRef) {
+      clearTimeout(window.popupTimeoutRef);
     }
   };
 
@@ -379,10 +369,13 @@ const WelcomePage: React.FC = () => {
                     height: '300px', 
                     width: '350px',
                     right: '-0%', // Slightly more to the right
-                    top: '-240px' // Position so robot's feet touch the separator line
+                    top: '-240px', // Position so robot's feet touch the separator line
+                    pointerEvents: 'auto' // Ensure robot is interactive
                   }}
                 >
-                  <RobotAnimation />
+                  <div style={{ width: '100%', height: '100%', cursor: 'pointer' }}>
+                    <RobotAnimation />
+                  </div>
                 </div>
               </div>
             </div>
@@ -445,7 +438,7 @@ const WelcomePage: React.FC = () => {
           {/* Floating Social Icons */}
           <div className={`flex gap-6 mt-8 opacity-0 transition-all duration-1000 delay-800 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}>
             <a 
-              href="https://linkedin.com/in/bala-subramanyam" 
+              href="https://www.linkedin.com/in/balasubramanyamd" 
               target="_blank"
               rel="noopener noreferrer"
               className="group p-3 rounded-full backdrop-blur-lg bg-white/10 border border-white/20 hover:bg-primary-500/20 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary-500/25"
@@ -456,7 +449,7 @@ const WelcomePage: React.FC = () => {
             </a>
             
             <a 
-              href="https://github.com/bala-subramanyam" 
+              href="https://github.com/Subramanyam6" 
               target="_blank"
               rel="noopener noreferrer"
               className="group p-3 rounded-full backdrop-blur-lg bg-white/10 border border-white/20 hover:bg-gray-500/20 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-gray-500/25"
@@ -468,6 +461,27 @@ const WelcomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-primary-700 border-t border-primary-600/50 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-sm text-white/80">
+            <span className="flex items-center gap-1">
+              Made with{' '}
+              <span 
+                role="img" 
+                aria-label="fire"
+                className="text-orange-400"
+              >
+                🔥
+              </span>{' '}
+              by Bala Subramanyam
+            </span>
+            <span className="hidden sm:inline text-white/60">·</span>
+            <span className="text-white/80">MIT Licensed</span>
+          </div>
+        </div>
+      </footer>
     </div>
     </>
   );

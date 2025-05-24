@@ -97,7 +97,7 @@ const Navbar = () => {
               <div className="py-1" role="none">
                 {/* LinkedIn Option */}
                 <a 
-                  href="https://linkedin.com" 
+                  href="https://www.linkedin.com/in/balasubramanyamd" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors duration-150"

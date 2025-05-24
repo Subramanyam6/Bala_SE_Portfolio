@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import ProjectCard from '../components/projects/ProjectCard';
-import SkillsSection from '../components/skills/SkillsSection';
 import TechStackModal from '../components/home/TechStackModal';
 import TechWheelAnimation from '../components/home/TechWheelAnimation';
 import { featuredProjects } from '../data/featuredProjects';
@@ -66,9 +65,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Skills Section */}
-      <SkillsSection />
     </div>
   );
 };

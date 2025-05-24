@@ -9,12 +9,12 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Connect</h4>
             <ul className="space-y-2">
               <li>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
+                <a href="https://github.com/Subramanyam6" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                   GitHub
                 </a>
               </li>
               <li>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
+                <a href="linkedin.com/in/balasubramanyamd" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                   LinkedIn
                 </a>
               </li>
