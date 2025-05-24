@@ -376,7 +376,7 @@ const RobotAnimation: React.FC = () => {
       hoverObj = intersects.length > 0 ? intersects[0].object : null;
       
       if (containerRef.current) {
-        document.body.style.cursor = hoverObj ? 'pointer' : 'default';
+        containerRef.current.style.cursor = hoverObj ? 'pointer' : 'default';
       }
 
       renderer.render(scene, camera);
@@ -391,6 +391,11 @@ const RobotAnimation: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('click', handleClick);
+      
+      // Reset cursor to default
+      if (containerRef.current) {
+        containerRef.current.style.cursor = 'default';
+      }
       
       if (renderer.domElement && containerRef.current) {
         containerRef.current.removeChild(renderer.domElement);

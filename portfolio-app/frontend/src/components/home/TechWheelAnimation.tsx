@@ -76,7 +76,7 @@ const TechWheelAnimation: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full shadow-xl p-3 flex items-center justify-center group cursor-pointer hover:scale-110 transition-transform duration-300 border border-gray-200"
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center group cursor-pointer hover:scale-150 transition-transform duration-300"
                   onMouseEnter={() => clearTimeout(hoverTimeout)}
                   onMouseLeave={() => {
                     hoverTimeout = setTimeout(() => setIsHovering(false), 1500);
@@ -84,14 +84,16 @@ const TechWheelAnimation: React.FC = () => {
                   style={{
                     left: `${radius + x}px`, 
                     top: `${radius + y}px`,
-                    width: '48px',
-                    height: '48px',
+                    width: '32px',
+                    height: '32px',
                     opacity: 0,
                     animation: `fadeIn 0.5s ease forwards ${delay}s, pulse 2s infinite ${delay + 0.5}s`
                   }}
                 >
                   <div className="flex flex-col items-center relative">
-                    <tech.icon className="text-lg" color={tech.color} />
+                    <div style={{ filter: 'brightness(1.2) saturate(1.3)' }} className="drop-shadow-lg">
+                      <tech.icon className="text-3xl" color={tech.color} />
+                    </div>
                     {/* Tooltip */}
                     <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 whitespace-nowrap z-10">
                       <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
@@ -112,7 +114,7 @@ const TechWheelAnimation: React.FC = () => {
 
       {/* Bulb button */}
       <button
-        className="relative group p-3 bg-white text-primary-600 rounded-full transform transition-all duration-300 hover:scale-110 hover:shadow-lg z-10"
+        className="relative group p-3 bg-white text-primary-600 rounded-full transform transition-all duration-300 hover:scale-110 hover:shadow-lg z-10 cursor-pointer"
         aria-label="View Tech Stack"
       >
         <div className="absolute -inset-2 rounded-full bg-yellow-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300 group-hover:animate-pulse"></div>

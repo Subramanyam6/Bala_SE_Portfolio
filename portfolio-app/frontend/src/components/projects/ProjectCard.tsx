@@ -48,10 +48,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     <div 
       ref={cardRef}
       className="card group overflow-hidden transition-all duration-300 hover:shadow-lg relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative overflow-hidden h-48">
+      <div 
+        className="relative overflow-hidden h-48"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {project.hasPdf && project.pdfPath ? (
           <div className="w-full h-full relative">
             <iframe

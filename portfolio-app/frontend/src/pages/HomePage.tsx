@@ -56,7 +56,7 @@ const HomePage = () => {
 
           <div className="mt-12 text-center">
             <Link
-              to="/projects"
+              to="/home/projects"
               className="inline-flex items-center text-primary-600 font-medium hover:text-primary-700"
             >
               View all projects

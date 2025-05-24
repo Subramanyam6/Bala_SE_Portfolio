@@ -103,7 +103,7 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn btn-primary w-full"
+                  className="w-full bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Signing In...' : 'Sign In'}
                 </button>
