@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { type ComponentType } from 'react';
 
@@ -245,7 +244,7 @@ const sectionVariants = {
 const AboutPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 pt-10">
         <div className="max-w-4xl mx-auto">
           {/* Header/Profile */}
           <motion.div
@@ -263,7 +262,7 @@ const AboutPage = () => {
               className="w-44 h-44 rounded-full overflow-hidden border-4 border-primary-600 shadow-lg flex-shrink-0 bg-gradient-to-br from-primary-100 to-primary-300 animate-fade-in-up"
             >
               <img
-                src="https://avatars.githubusercontent.com/u/22278408?v=4"
+                src="/Bala DP.jpg"
                 alt="Bala Subramanyam Duggirala"
                 className="w-full h-full object-cover"
               />
@@ -297,9 +296,6 @@ const AboutPage = () => {
                     <span className="font-medium">{link.name}</span>
                   </motion.a>
                 ))}
-                <Link to="/contact" className="btn btn-primary px-4 py-2 rounded-lg shadow">
-                  Contact Me
-                </Link>
               </div>
             </div>
             {/* Animated background shapes */}

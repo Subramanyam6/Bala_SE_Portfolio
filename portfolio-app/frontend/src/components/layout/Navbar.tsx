@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [contactDropdownOpen, setContactDropdownOpen] = useState(false);
   const [emailTooltipVisible, setEmailTooltipVisible] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -30,10 +31,10 @@ const Navbar = () => {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="container mx-auto flex items-center justify-between p-4">
+      <nav className="w-full px-4 flex items-center justify-between p-4">
         <div className="flex-1 flex items-start pl-0">
           <Link to="/" className="flex items-start">
-            <span className="text-2xl font-bold text-primary-600">Bala Subramanyam Duggirala</span>
+            <span className="text-2xl ml-0 font-bold text-primary-600">Bala Subramanyam Duggirala</span>
           </Link>
         </div>
 
@@ -45,9 +46,10 @@ const Navbar = () => {
               to={item.href}
               className={({ isActive }) =>
                 isActive
-                  ? 'font-medium text-primary-600 border-b-2 border-primary-600 pb-1'
-                  : 'font-medium text-gray-600 hover:text-primary-600 hover:border-b-2 hover:border-primary-600 pb-1'
+                  ? 'font-medium text-primary-600 border-b-2 border-primary-600 pb-1 transition-all duration-300'
+                  : 'font-medium text-gray-600 hover:text-primary-600 hover:border-b-2 hover:border-primary-600 pb-1 transition-all duration-300'
               }
+              end={item.href === '/home'}
             >
               {item.name}
             </NavLink>
@@ -56,19 +58,22 @@ const Navbar = () => {
           {/* Contact Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button 
-              onClick={() => setContactDropdownOpen(!contactDropdownOpen)}
-              onMouseEnter={() => setContactDropdownOpen(true)}
-              onMouseLeave={() => {
-                setTimeout(() => {
-                  if (!dropdownRef.current?.contains(document.activeElement)) {
-                    setContactDropdownOpen(false);
-                  }
-                }, 5000);
+              onClick={(e) => {
+                e.preventDefault();
+                setContactDropdownOpen(!contactDropdownOpen);
               }}
-              className={`group flex items-center font-medium text-gray-600 hover:text-primary-600 focus:outline-none transition-all duration-300 ${contactDropdownOpen ? 'text-primary-600' : ''}`}
+              className={`group flex items-center font-medium focus:outline-none transition-all duration-300 ${
+                location.pathname === '/home/contact' || contactDropdownOpen 
+                  ? 'text-primary-600' 
+                  : 'text-gray-600 hover:text-primary-600'
+              }`}
               aria-expanded={contactDropdownOpen}
             >
-              <span className={`${contactDropdownOpen ? 'border-b-2 border-primary-600' : 'group-hover:border-b-2 group-hover:border-primary-600'} pb-1 transition-all duration-300`}>
+              <span className={`${
+                location.pathname === '/home/contact' || contactDropdownOpen 
+                  ? 'border-b-2 border-primary-600' 
+                  : 'group-hover:border-b-2 group-hover:border-primary-600'
+              } pb-1 transition-all duration-300`}>
                 Contact
               </span>
               <ChevronDownIcon 
@@ -91,8 +96,6 @@ const Navbar = () => {
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="menu-button"
-              onMouseEnter={() => setContactDropdownOpen(true)}
-              onMouseLeave={() => setContactDropdownOpen(false)}
             >
               <div className="py-1" role="none">
                 {/* LinkedIn Option */}
@@ -184,10 +187,11 @@ const Navbar = () => {
                 to={item.href}
                 className={({ isActive }) =>
                   isActive
-                    ? 'block py-2 font-medium text-primary-600'
-                    : 'block py-2 font-medium text-gray-600 hover:text-primary-600'
+                    ? 'block py-2 font-medium text-primary-600 transition-colors duration-300'
+                    : 'block py-2 font-medium text-gray-600 hover:text-primary-600 transition-colors duration-300'
                 }
                 onClick={() => setMobileMenuOpen(false)}
+                end={item.href === '/home'}
               >
                 {item.name}
               </NavLink>

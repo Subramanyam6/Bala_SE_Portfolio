@@ -15,7 +15,7 @@ const HomePage = () => {
       <TechStackModal isOpen={isTechStackModalOpen} onClose={() => setIsTechStackModalOpen(false)} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-400 text-white py-20 relative overflow-hidden">
+      <section className="bg-gradient-to-r from-primary-600 to-primary-400 text-white py-[5.5rem] relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-full mx-auto">
             <div className="flex justify-between items-center w-full">
@@ -41,15 +41,15 @@ const HomePage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-              Featured Projects
+              Featured (Live!) Projects
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-              Check out some of my recent work
+              Feel free to visit the actual websites!
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project) => (
+            {featuredProjects.slice(0, 3).map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>

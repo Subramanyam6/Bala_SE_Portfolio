@@ -33,7 +33,7 @@ const RobotAnimation: React.FC = () => {
     
     // Check if WebGL is available
     if (!webglAvailable()) {
-      setError('😞 WebGL isn’t supported here. Try Chrome, Firefox, or Safari on desktop.');
+      setError("WebGL is not supported. Please try Chrome, Firefox, or Safari on desktop.");
       return;
     }
     
@@ -68,9 +68,9 @@ const RobotAnimation: React.FC = () => {
       if ('colorSpace' in renderer) {
         (renderer as any).colorSpace = (THREE as any).SRGBColorSpace;
       } 
-      // For older versions of Three.js
+      // For older versions of Three.js - use fallback
       else if ('outputEncoding' in renderer) {
-        (renderer as any).outputEncoding = (THREE as any).sRGBEncoding;
+        (renderer as any).outputEncoding = 3001; // THREE.sRGBEncoding fallback value
       }
     } catch (err) {
       console.warn('Could not set color space/encoding:', err);
@@ -102,9 +102,10 @@ const RobotAnimation: React.FC = () => {
     // Controls with adjusted settings for compact view
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
-    controls.minDistance = 2;    // Closer minimum for compact space
-    controls.maxDistance = 8;    // Reasonable maximum for small container
-    controls.target.set(0, 1.5, -2.0); // Target at robot's center
+    controls.enableZoom = true;  // Enable zoom
+    controls.minDistance = 1;    // Allow closer zoom
+    controls.maxDistance = 10;   // Allow further zoom
+    controls.target.set(0.6, 1.1, -2.0); // Target at robot's center
     controls.update();
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.4; // Slightly faster for more dynamic feel
@@ -119,7 +120,7 @@ const RobotAnimation: React.FC = () => {
     let isRotating = false;
     let rotationAngle = 0;
     let waveTriggered = false;
-    let robotModel: THREE.Group | null = null;
+    let robotModel: THREE.Object3D | null = null;
 
     // Load robot with improved error handling
     const loadModel = (urlIndex: number) => {
@@ -192,13 +193,16 @@ const RobotAnimation: React.FC = () => {
         robot.position.y = 0;            // Center position for compact container
         
         scene.add(robot);
+
+        // Simple approach - no complex interaction meshes needed
+
         robot.traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).isMesh) {
             obj.castShadow = true;
             obj.receiveShadow = true;
           }
         });
-  
+
         mixer = new THREE.AnimationMixer(robot);
         
         if (gltf.animations && gltf.animations.length > 0) {
@@ -250,6 +254,10 @@ const RobotAnimation: React.FC = () => {
       cube.castShadow = true;
       cube.receiveShadow = true;
       scene.add(cube);
+      
+      
+      // Set robotModel to reference the cube for consistent interaction handling
+      robotModel = cube;
       
       // Add a head
       const headGeometry = new THREE.SphereGeometry(0.4, 32, 32);
@@ -311,13 +319,22 @@ const RobotAnimation: React.FC = () => {
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       
       // Check if hovering over robot to trigger wave
       ray.setFromCamera(mouse, camera);
-      const intersects = ray.intersectObjects(scene.children, true);
-      const nowHovering = intersects.length > 0;
+      
+      // Simple raycasting like the working test - check robot directly
+      let isHoveringRobot = false;
+      if (robotModel) {
+        const intersects = ray.intersectObject(robotModel, true);
+        isHoveringRobot = intersects.length > 0;
+      }
+      const nowHovering = isHoveringRobot;
       
       // Only trigger wave on hover start and if not already waving or rotating
       if (nowHovering && !hoverObj && waveAction && !waveTriggered && !isRotating) {
@@ -327,14 +344,29 @@ const RobotAnimation: React.FC = () => {
         setTimeout(() => {
           waveTriggered = false;
         }, 2000); // Prevent retrigger for 2 seconds
-      }
+              }
+        
+        hoverObj = isHoveringRobot ? robotModel : null;
       
-      hoverObj = nowHovering ? intersects[0].object : null;
+      // Update cursor based on hover state
+      if (containerRef.current) {
+        containerRef.current.style.cursor = isHoveringRobot ? 'pointer' : 'default';
+      }
     };
 
-    const handleClick = () => {
-      if (hoverObj && !isRotating && robotModel) {
-        // Start 360 degree rotation
+        const handleClick = () => {
+      // Check if clicking on robot using the same logic as hover
+      ray.setFromCamera(mouse, camera);
+      
+      // Simple raycasting like the working test - check robot directly
+      let isClickingRobot = false;
+      if (robotModel) {
+        const intersects = ray.intersectObject(robotModel, true);
+        isClickingRobot = intersects.length > 0;
+      }
+      
+      // If clicking on robot and not already rotating, start rotation
+      if (isClickingRobot && robotModel && !isRotating) {
         isRotating = true;
         rotationAngle = 0;
       }
@@ -342,8 +374,10 @@ const RobotAnimation: React.FC = () => {
 
     // Add event listeners
     window.addEventListener('resize', handleResize);
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('click', handleClick);
+    if (containerRef.current) {
+      containerRef.current.addEventListener('pointermove', handlePointerMove);
+      containerRef.current.addEventListener('click', handleClick);
+    }
 
     // Animation loop
     const clock = new THREE.Clock();
@@ -369,12 +403,22 @@ const RobotAnimation: React.FC = () => {
 
       if (robotModel) {
         robotModel.position.y = 0 + Math.sin(clock.elapsedTime * 0.5) * 0.08; // Slightly more float for visual appeal
+        
+        // Simple approach - robot moves naturally with its position
       }
 
       ray.setFromCamera(mouse, camera);
-      const intersects = ray.intersectObjects(scene.children, true);
-      hoverObj = intersects.length > 0 ? intersects[0].object : null;
       
+      // Simple raycasting like the working test - check robot directly
+      let isHovering = false;
+      if (robotModel) {
+        const intersects = ray.intersectObject(robotModel, true);
+        isHovering = intersects.length > 0;
+      }
+      
+      hoverObj = isHovering ? robotModel : null;
+      
+      // Update cursor based on hover state
       if (containerRef.current) {
         containerRef.current.style.cursor = hoverObj ? 'pointer' : 'default';
       }
@@ -389,16 +433,17 @@ const RobotAnimation: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('click', handleClick);
       
-      // Reset cursor to default
-      if (containerRef.current) {
-        containerRef.current.style.cursor = 'default';
-      }
-      
-      if (renderer.domElement && containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      // Store reference for cleanup
+      const container = containerRef.current;
+      if (container) {
+        container.removeEventListener('pointermove', handlePointerMove);
+        container.removeEventListener('click', handleClick);
+        container.style.cursor = 'default';
+        
+        if (renderer.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
       }
     };
   }, [loadingAttempt]);

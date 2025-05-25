@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { EnvelopeIcon, PhoneIcon, MapPinIcon, UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
@@ -125,52 +126,40 @@ const ContactPage = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight drop-shadow-lg animate-fadeInUp">
-              Get in Touch
-            </h1>
+            <div className="relative inline-block mb-4 animate-fadeInUp">
+              <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight drop-shadow-lg">
+                Get in Touch
+              </h1>
+              <motion.span
+                className="absolute top-0 left-full ml-6 -translate-y-0 bg-yellow-200 text-gray-900 font-bold text-4xl px-5 py-1 rounded shadow-md whitespace-nowrap"
+                initial={{ x: 50, opacity: 0 }}
+                animate={{
+                  x: 0,
+                  opacity: [0.0, 1],
+                  rotate: [-0, -0, -0]
+                }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 100,
+                  damping: 40,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                  repeatDelay: 2
+                }}
+              >
+                Open to Work!
+              </motion.span>
+            </div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto animate-fadeInUp delay-100">
-              I'm excited to connect with you! Whether you have a project in mind, a question, or just want to say hello, please fill out the form below.
+              I'm excited to connect with you! Whether you are a recruiter, have a project in mind, a question, or just want to say hello, please fill out the form below. I'll directly get an email and respond within 24 hours!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 animate-fadeInUp delay-200">
-            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center text-center border border-blue-100 hover:shadow-2xl transition-all duration-300">
-              <div className="bg-blue-100 p-4 rounded-full mb-6">
-                <EnvelopeIcon className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Email</h3>
-              <button 
-                onClick={() => {
-                  const form = document.getElementById('contact-form');
-                  if (form) form.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="text-gray-600 hover:text-blue-600 focus:outline-none transition-colors duration-300 underline"
-              >
-                bduggirala2@huskers.unl.edu
-              </button>
-            </div>
-            
-            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center text-center border border-blue-100 hover:shadow-2xl transition-all duration-300">
-              <div className="bg-blue-100 p-4 rounded-full mb-6">
-                <PhoneIcon className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Phone</h3>
-              <p className="text-gray-600">Available upon request</p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center text-center border border-blue-100 hover:shadow-2xl transition-all duration-300">
-              <div className="bg-blue-100 p-4 rounded-full mb-6">
-                <MapPinIcon className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Location</h3>
-              <p className="text-gray-600">Lincoln, NE</p>
-            </div>
-          </div>
 
           <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-blue-100 animate-fadeInUp delay-300">
             <h2 className="text-2xl font-bold text-gray-900 mb-8 pb-4 border-b border-gray-100 flex items-center gap-2">
               <PaperAirplaneIcon className="h-6 w-6 text-blue-500" />
-              Send a Message
+              Send an Email to Bala!
             </h2>
             
             {submitSuccess ? (
@@ -324,26 +313,31 @@ const ContactPage = () => {
                 )}
 
                 <div className="text-right">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ml-auto"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : (
-                      <>
-                        <PaperAirplaneIcon className="h-5 w-5" />
-                        Send Message
-                      </>
-                    )}
-                  </button>
+                  <div className="relative inline-block group">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ml-auto"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center">
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : (
+                        <>
+                          <PaperAirplaneIcon className="h-5 w-5" />
+                          Send Email
+                        </>
+                      )}
+                    </button>
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      sends email to <span className="text-blue-400 font-mono">bduggirala2@huskers.unl.edu</span>
+                    </div>
+                  </div>
                 </div>
               </form>
             )}

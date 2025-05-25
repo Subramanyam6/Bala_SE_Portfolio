@@ -30,46 +30,8 @@ const ProjectsPage = () => {
         setLoading(true);
         setError(null);
         
-        // Mock data for additional projects
-        const mockProjects = [
-          {
-            id: 101,
-            title: "Professional Portfolio Website",
-            slug: "professional-portfolio-website",
-            description: "A personal portfolio website showcasing my skills and projects",
-            thumbnail: "https://via.placeholder.com/800x600",
-            technologies: ["React", "TypeScript", "Tailwind CSS"],
-            liveUrl: "#",
-            hasPdf: false,
-            pdfPath: ""
-          },
-          {
-            id: 102,
-            title: "E-commerce Platform",
-            slug: "e-commerce-platform",
-            description: "A full-featured e-commerce platform with product management and checkout",
-            thumbnail: "https://via.placeholder.com/800x600",
-            technologies: ["React", "Node.js", "MongoDB", "Express"],
-            liveUrl: "#",
-            hasPdf: false,
-            pdfPath: ""
-          },
-          {
-            id: 103,
-            title: "Task Management System",
-            slug: "task-management-system",
-            description: "A project management tool for tracking tasks and team collaboration",
-            thumbnail: "https://via.placeholder.com/800x600",
-            technologies: ["Vue.js", "Firebase", "Tailwind CSS"],
-            liveUrl: "#",
-            hasPdf: false,
-            pdfPath: ""
-          }
-        ];
-
-        // Combine mock projects with featured projects from home page
-        // ensuring no duplicate IDs by using different ID ranges
-        const allProjects = [...featuredProjects, ...mockProjects];
+        // Use only the featured projects
+        const allProjects = featuredProjects;
         
         // Filter by search term if provided
         let filteredProjects = allProjects;
@@ -139,19 +101,23 @@ const ProjectsPage = () => {
 
         {/* Filters */}
         <div className="mb-8 max-w-3xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <div className="flex-1 w-full">
               <input
                 type="text"
                 placeholder="Search projects..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex-1">
+            <div className="w-full md:w-auto md:min-w-[200px]">
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md bg-white cursor-pointer appearance-none bg-no-repeat bg-right bg-[length:16px] pr-10"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.75rem center'
+                }}
                 value={selectedTechnology || ''}
                 onChange={(e) => setSelectedTechnology(e.target.value || null)}
               >

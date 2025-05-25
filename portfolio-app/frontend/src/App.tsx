@@ -9,6 +9,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/LoginPage';
 import WelcomePage from './pages/WelcomePage';
 import PDFViewerPage from './pages/PDFViewerPage';
+import RobotTestPage from './pages/RobotTestPage';
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
       <Routes>
         {/* Welcome page as the initial landing page with no layout */}
         <Route path="/" element={<WelcomePage />} />
+        
+        {/* Test page for robot hover debugging */}
+        <Route path="/robot-test" element={<RobotTestPage />} />
         
         {/* Main application pages with layout */}
         <Route path="/home" element={<Layout />}>
