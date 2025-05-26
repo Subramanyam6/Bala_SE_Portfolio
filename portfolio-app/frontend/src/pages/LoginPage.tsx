@@ -53,6 +53,18 @@ const LoginPage = () => {
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
             
+            {/* Note about login purpose */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start">
+                <svg className="h-5 w-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm text-blue-800">
+                  I use this to add projects, and make edits to the existing ones.
+                </p>
+              </div>
+            </div>
+            
             {loginSuccess ? (
               <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-4 mb-6 text-center">
                 <p className="font-medium">Login successful!</p>

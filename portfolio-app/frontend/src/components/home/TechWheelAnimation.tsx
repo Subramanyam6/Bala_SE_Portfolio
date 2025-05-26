@@ -67,7 +67,7 @@ const TechWheelAnimation: React.FC = () => {
                       />
                     </div>
                     {/* Tooltip */}
-                    <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 whitespace-nowrap z-10">
+                    <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 whitespace-nowrap z-50">
                       <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
                       <span className="text-sm font-medium text-gray-800">{tech.name}</span>
                     </div>

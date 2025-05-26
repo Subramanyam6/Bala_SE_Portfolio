@@ -25,6 +25,7 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showAllTechnologies, setShowAllTechnologies] = useState(false);
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
@@ -47,6 +48,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     return () => observer.disconnect();
   }, []);
 
+  const handleIframeLoad = () => {
+    setIsIframeLoading(false);
+  };
+
   return (
     <div 
       ref={cardRef}
@@ -59,16 +64,41 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       >
         {project.hasPdf && project.pdfPath ? (
           <div className="w-full h-full relative">
+            {isIframeLoading && (
+              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                <div className="flex flex-col items-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mb-2"></div>
+                  <p className="text-sm text-gray-600">Loading PDF...</p>
+                </div>
+              </div>
+            )}
             <iframe
               ref={iframeRef}
               src={`${project.pdfPath}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
               className="w-full h-full border-0"
               title={project.title + ' PDF Document'}
               loading="lazy"
+              onLoad={handleIframeLoad}
             />
           </div>
         ) : (isEquipmentMarketplace || isMultiAgentRLWar) ? (
           <div className="w-full h-full relative">
+            {isIframeLoading && (
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center z-10">
+                <div className="flex flex-col items-center">
+                  <div className="relative">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-200"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent absolute top-0 left-0"></div>
+                  </div>
+                  <p className="text-sm text-primary-700 mt-3 font-medium">Loading live website...</p>
+                  <div className="flex space-x-1 mt-2">
+                    <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
             <iframe
               ref={iframeRef}
               src={project.liveUrl}
@@ -76,6 +106,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               title={project.title + ' Live Demo'}
               loading="lazy"
               sandbox="allow-same-origin allow-scripts"
+              onLoad={handleIframeLoad}
             />
           </div>
         ) : isNewProject ? (

@@ -238,7 +238,8 @@ const sectionVariants = {
       duration: 0.5,
       ease: 'easeInOut'
     }
-  })
+  }),
+  exit: { opacity: 0, y: -50 }
 };
 
 const AboutPage = () => {
@@ -250,7 +251,8 @@ const AboutPage = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.6 }}
+            exit="exit"
+            viewport={{ once: false, amount: 0.6 }}
             variants={sectionVariants}
             custom={0}
             className="bg-white rounded-3xl shadow-2xl p-10 mb-14 flex flex-col md:flex-row gap-10 items-center md:items-start relative overflow-hidden"
@@ -335,7 +337,8 @@ const AboutPage = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            exit="exit"
+            viewport={{ once: false, amount: 0.2 }}
             variants={sectionVariants}
             custom={1}
             className="mb-14"
@@ -398,7 +401,8 @@ const AboutPage = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            exit="exit"
+            viewport={{ once: false, amount: 0.2 }}
             variants={sectionVariants}
             custom={2}
             className="mb-14"
@@ -410,7 +414,8 @@ const AboutPage = () => {
                   key={exp.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  exit={{ opacity: 0, y: -30 }}
+                  viewport={{ once: false }}
                   transition={{ delay: idx * 0.1, duration: 0.3, ease: 'easeInOut' }}
                   className="bg-white p-7 rounded-2xl shadow-md border-l-4 border-primary-600 hover:shadow-xl transition-shadow duration-300"
                 >
@@ -435,7 +440,8 @@ const AboutPage = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
+            exit="exit"
+            viewport={{ once: false, amount: 0.5 }}
             variants={sectionVariants}
             custom={3}
             className="mb-14"
@@ -447,7 +453,8 @@ const AboutPage = () => {
                   key={edu.degree}
                   initial={{ opacity: 0, x: 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                  exit={{ opacity: 0, x: -40 }}
+                  viewport={{ once: false }}
                   transition={{ delay: idx * 0.1, duration: 0.3, ease: 'easeInOut' }}
                   className="bg-white p-6 rounded-2xl shadow border-l-4 border-primary-400"
                 >
