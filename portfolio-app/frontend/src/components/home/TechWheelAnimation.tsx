@@ -46,7 +46,7 @@ const TechWheelAnimation: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center group cursor-pointer hover:scale-150 transition-transform duration-300"
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center group cursor-pointer hover:z-50 hover:scale-150 transition-transform duration-300"
                   style={{
                     left: `${radius + x}px`, 
                     top: `${radius + y}px`,
@@ -67,7 +67,7 @@ const TechWheelAnimation: React.FC = () => {
                       />
                     </div>
                     {/* Tooltip */}
-                    <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 whitespace-nowrap z-50">
+                    <div className="absolute right-full mr-2 -mt-1 px-3 py-1 bg-white rounded-lg shadow-lg pointer-events-none opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-transform duration-200 whitespace-nowrap z-20">
                       <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
                       <span className="text-sm font-medium text-gray-800">{tech.name}</span>
                     </div>

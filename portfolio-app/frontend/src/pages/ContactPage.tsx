@@ -132,19 +132,19 @@ const ContactPage = () => {
               </h1>
               <motion.span
                 className="absolute top-0 left-full ml-6 -translate-y-0 bg-yellow-200 text-gray-900 font-bold text-4xl px-5 py-1 rounded shadow-md whitespace-nowrap"
-                initial={{ x: 50, opacity: 0 }}
+                initial={{ x: 100, opacity: 0.0 }}
                 animate={{
                   x: 0,
-                  opacity: [0.0, 1],
+                  opacity: 1,
                   rotate: [-0, -0, -0]
                 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 100,
-                  damping: 40,
+                  stiffness: 5,
+                  damping: 5,
                   repeat: Infinity,
                   repeatType: 'reverse',
-                  repeatDelay: 2
+                  repeatDelay: 0.0
                 }}
               >
                 Open to Work!
