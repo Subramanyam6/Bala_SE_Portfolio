@@ -1,0 +1,9 @@
+{
+    "routes": [
+      {
+        "route": "/*",
+        "redirect": "https://portfolio-frontend-93780733243.us-central1.run.app/",
+        "statusCode": 301
+      }
+    ]
+  }
