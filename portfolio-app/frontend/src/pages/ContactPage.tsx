@@ -6,7 +6,7 @@ import { UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIc
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
-  'https://portfolio-api-app-fnhrghefdkahakdn.canadacentral-01.azurewebsites.net';
+  'https://portfolio-backend-93780733243.us-central1.run.app';
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
