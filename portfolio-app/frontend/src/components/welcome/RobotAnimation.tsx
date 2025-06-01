@@ -19,6 +19,7 @@ const RobotAnimation: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingAttempt, setLoadingAttempt] = useState(0);
   const [debugInfo, setDebugInfo] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
   
   // Remove debug logs in production
   const isProduction = true;
@@ -158,7 +159,7 @@ const RobotAnimation: React.FC = () => {
             }
           );
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Fetch error:', error);
           logDebug(`Fetch error: ${error.message}`);
           
@@ -183,6 +184,7 @@ const RobotAnimation: React.FC = () => {
     const onLoad = (gltf: any) => {
       logDebug('Model loaded successfully!');
       isModelLoaded = true;
+      setIsLoading(false);
       
       try {
         const robot = gltf.scene;
@@ -240,6 +242,7 @@ const RobotAnimation: React.FC = () => {
       if (isModelLoaded) return;
       
       logDebug('Using fallback cube');
+      setIsLoading(false);
       const cubeGeometry = new THREE.BoxGeometry(0.8, 1.6, 0.8);
       const cubeMaterial = new THREE.MeshStandardMaterial({
         color: 0x66ccff,
@@ -483,6 +486,18 @@ const RobotAnimation: React.FC = () => {
         className="absolute inset-0 rounded-2xl overflow-hidden" 
         style={{ width: '100%', height: '100%' }} // Fill the container provided by parent
       />
+      
+      {isLoading && !error && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex flex-col items-center space-y-3">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+            </div>
+            <p className="text-sm text-blue-600 font-medium">Loading Robot...</p>
+          </div>
+        </div>
+      )}
       
       {error && (
         <div className="absolute bottom-16 w-full flex justify-center px-4">
