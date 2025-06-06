@@ -169,9 +169,9 @@ const experience = [
     org: 'University of Nebraska–Lincoln',
     date: 'Nov 2021 – Dec 2023',
     bullets: [
-      '•	Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.'
-      '•	Engineered efficient data structures and workflows to accelerate complex computational tasks.'
-      '•	Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.'
+      '•	Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.',
+      '•	Engineered efficient data structures and workflows to accelerate complex computational tasks.',
+      '•	Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.',
       '•	Created intuitive web applications to help users explore and interpret complex research results.'
     ],
   },
