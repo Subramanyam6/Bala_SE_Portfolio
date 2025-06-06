@@ -149,10 +149,10 @@ const experience = [
     org: 'University of Nebraska–Lincoln',
     date: 'Jan 2025 – Present',
     bullets: [
-      'Built an event-driven ingestion pipeline on GCP: Canvas click events published to Pub/Sub, consumed by Python Flask services on Cloud Run, then loaded into BigQuery.',
-      'Developed interactive analytics dashboards using D3.js to visualize student engagement metrics in real time.',
-      'Built pytest + Flask-Testing integration tests; enforced an 85% coverage gate with automated reports.',
-      'Configured Cloud Build CI/CD pipelines to build Docker images and deploy services to Cloud Run.',
+      'Built a real-time data ingestion pipeline to collect and analyze user engagement events, enabling actionable insights for educators and administrators.',
+      'Developed interactive dashboards that visualize key engagement metrics and trends, supporting data-driven decision making.',
+      'Established automated testing processes to ensure high-quality code and reliable system updates.',
+      'Set up continuous integration and deployment pipelines, streamlining service delivery and reducing deployment risk.',
     ],
   },
   {
@@ -160,8 +160,8 @@ const experience = [
     org: 'University of Nebraska–Lincoln',
     date: 'Aug 2024 – Dec 2024',
     bullets: [
-      'Developed a RESTful Python Flask API serving geoJSON for 100K+ data points, visualized with Leaflet.js filters and choropleth layers.',
-      'Deployed via Docker on a Linux VM with Nginx+Gunicorn, ensuring SSL-secured, high-availability service.',
+      'Developed and deployed a scalable web API for delivering large volumes of geospatial data, supporting rich, interactive map visualizations.',
+      'Ensured secure, high-availability service for geospatial applications used by multiple stakeholders.',
     ],
   },
   {
@@ -169,10 +169,10 @@ const experience = [
     org: 'University of Nebraska–Lincoln',
     date: 'Nov 2021 – Dec 2023',
     bullets: [
-      'Conducted advanced research on scalable decision-making AI algorithms (PBVI, I-POMCP-PF) for multi-agent systems, involving intricate algorithmic analysis and optimization.',
-      'Implemented complex data structures (e.g., recursive trees, particle filters) in Cython to eliminate Python runtime overhead, reducing runtime by 40%.',
-      'Applied TensorFlow for GPU acceleration, enabling real-time processing of millions of decision-making computations and cutting runtime from hours to seconds.',
-      'Developed interactive R Shiny web applications to effectively present complex, high-dimensional decision data.',
+      '•	Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.',
+      '•	Engineered efficient data structures and workflows to accelerate complex computational tasks.',
+      '•	Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.',
+      '•	Created intuitive web applications to help users explore and interpret complex research results.'
     ],
   },
   {
@@ -180,11 +180,11 @@ const experience = [
     org: 'Cognizant, India',
     date: 'Feb 2018 – Aug 2021',
     bullets: [
-      'Developed Java Spring Boot microservices (Spring Data JPA) on AWS ECS, exposing REST APIs and handling Kafka event streams.',
-      'Refactored a monolithic application into modular Spring components using dependency injection, cutting maintenance effort by 50%.',
-      'Designed IBM DataStage ETL jobs to process 5 TB/month of insurance claims from SQL Server and Oracle.',
-      'Implemented Jenkins CI/CD pipelines with JUnit and Mockito tests, achieving zero post-deployment defects for two web portals (20K+ users).',
-      'Designed microservices to meet 99.9% uptime SLAs and optimized response times under 100ms, enhancing system reliability.',
+      '•	Developed modular backend services to support reliable, high-performance business applications.',
+      '•	Refactored legacy systems to improve maintainability and reduce operational overhead.',
+      '•	Designed and managed data processing workflows for large-scale financial and operational data.',
+      '•	Established robust automation for testing and deployment, ensuring stable releases and minimal downtime.',
+      '•	Achieved high system reliability and responsiveness, meeting demanding service level requirements.'
     ],
   },
 ];

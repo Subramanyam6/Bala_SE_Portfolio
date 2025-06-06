@@ -113,7 +113,7 @@ const ContactPage = () => {
       }
     } else {
       // Remove contact details section when checkbox is unchecked
-      let message = formik.values.message;
+      const message = formik.values.message;
       const contactIndex = message.lastIndexOf('\n\nContact Details:');
       if (contactIndex !== -1) {
         formik.setFieldValue('message', message.substring(0, contactIndex));
