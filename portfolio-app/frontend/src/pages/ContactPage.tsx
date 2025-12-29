@@ -4,9 +4,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  'https://portfolio-backend-93780733243.us-central1.run.app';
+// Always use the frontend proxy to avoid hardcoding backend URLs in the bundle
+const API_BASE_URL = '';
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

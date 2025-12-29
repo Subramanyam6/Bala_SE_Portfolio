@@ -169,22 +169,22 @@ const experience = [
     org: 'University of Nebraska–Lincoln',
     date: 'Nov 2021 – Dec 2023',
     bullets: [
-      '•	Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.',
-      '•	Engineered efficient data structures and workflows to accelerate complex computational tasks.',
-      '•	Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.',
-      '•	Created intuitive web applications to help users explore and interpret complex research results.'
+      'Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.',
+      'Engineered efficient data structures and workflows to accelerate complex computational tasks.',
+      'Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.',
+      'Created intuitive web applications to help users explore and interpret complex research results.',
     ],
   },
   {
     title: 'Programmer Analyst',
     org: 'Cognizant, India',
-    date: 'Feb 2018 – Aug 2021',
+    date: 'Feb 2016 – Aug 2021',
     bullets: [
-      '•	Developed modular backend services to support reliable, high-performance business applications.',
-      '•	Refactored legacy systems to improve maintainability and reduce operational overhead.',
-      '•	Designed and managed data processing workflows for large-scale financial and operational data.',
-      '•	Established robust automation for testing and deployment, ensuring stable releases and minimal downtime.',
-      '•	Achieved high system reliability and responsiveness, meeting demanding service level requirements.',
+      'Developed modular backend services to support reliable, high-performance business applications.',
+      'Refactored legacy systems to improve maintainability and reduce operational overhead.',
+      'Designed and managed data processing workflows for large-scale financial and operational data.',
+      'Established robust automation for testing and deployment, ensuring stable releases and minimal downtime.',
+      'Achieved high system reliability and responsiveness, meeting demanding service level requirements.',
     ],
   },
 ];

@@ -6,7 +6,7 @@ export const featuredProjects = [
     description: 'A platform for buying and selling heavy machinery with secure transactions and vendor verification.',
     thumbnail: 'https://via.placeholder.com/600x400',
     technologies: ['ASP.NET Core MVC', 'Entity Framework', 'SQL Server', 'Azure', 'Docker'],
-    liveUrl: 'https://miniequipmarketplace-factgzd7cpeabne8.canadacentral-01.azurewebsites.net',
+    liveUrl: 'https://equipment-marketplace-app-25588497440.us-central1.run.app',
     hasPdf: false,
     pdfPath: ''
   },
@@ -23,6 +23,17 @@ export const featuredProjects = [
   },
   {
     id: 3,
+    title: 'California Water Quality GIS (WIP)',
+    slug: 'gis-application',
+    description: 'An interactive Geographic Information System application featuring real-time mapping, spatial data visualization, and geospatial analysis capabilities.',
+    thumbnail: 'https://via.placeholder.com/600x400',
+    technologies: ['React', 'Python', 'Leaflet.js', 'Folium'],
+    liveUrl: 'https://gis-app-frontend-563114367034.us-central1.run.app',
+    hasPdf: false,
+    pdfPath: ''
+  },
+  {
+    id: 4,
     title: 'A Literature Review on RL in Single & Multi-Agent Systems, its Scalability, and Applications',
     slug: 'literature-review-rl-mas',
     description: 'A comprehensive literature review on reinforcement learning in single and multi-agent systems, focusing on scalability and real-world applications.',
@@ -32,7 +43,7 @@ export const featuredProjects = [
     hasPdf: true
   },
   {
-    id: 4,
+    id: 5,
     title: 'Symbolic-Execution-Testing-of-TCP-with-KLEE-Float',
     slug: 'symbolic-execution-tcp-klee',
     description: '',
@@ -42,7 +53,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 5,
+    id: 6,
     title: 'Smart-Contract-Deployment-on-Etherium-Blockchain',
     slug: 'smart-contract-ethereum',
     description: '',
@@ -52,7 +63,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 6,
+    id: 7,
     title: 'Dynamic-Dynasties-Map-of-Indian-History-with-MLPQ-Database',
     slug: 'dynamic-dynasties-indian-history',
     description: '',

@@ -30,9 +30,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
   const isMultiAgentRLWar = project.slug === 'multi-agent-rl-war';
+  const isGISApplication = project.slug === 'gis-application';
   const isLiteratureReview = project.slug === 'literature-review-rl-mas';
-  const isNewProject = !isEquipmentMarketplace && !isMultiAgentRLWar && !isLiteratureReview;
+  const isNewProject = !isEquipmentMarketplace && !isMultiAgentRLWar && !isGISApplication && !isLiteratureReview;
   const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/600x400?text=No+Image';
+  const WAR_IFRAME_Y_OFFSET = -300; // ← adjust as needed
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -81,8 +83,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               onLoad={handleIframeLoad}
             />
           </div>
-        ) : (isEquipmentMarketplace || isMultiAgentRLWar) ? (
-          <div className="w-full h-full relative">
+        ) : (isEquipmentMarketplace || isMultiAgentRLWar || isGISApplication) ? (
+          <div className="w-full h-full relative overflow-hidden">
             {isIframeLoading && (
               <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center z-10">
                 <div className="flex flex-col items-center">
@@ -107,6 +109,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               loading="lazy"
               sandbox="allow-same-origin allow-scripts"
               onLoad={handleIframeLoad}
+              style={isMultiAgentRLWar ? { transform: `translateY(${WAR_IFRAME_Y_OFFSET}px)` } : undefined}
             />
           </div>
         ) : isNewProject ? (
@@ -171,12 +174,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                     </a>
                   )}
                   {/* Source Code Button for specific projects */}
-                  {(isEquipmentMarketplace || isMultiAgentRLWar) && (
+                  {(isEquipmentMarketplace || isMultiAgentRLWar || isGISApplication) && (
                     <a 
                       href={
                         isEquipmentMarketplace 
                           ? "https://github.com/Subramanyam6/MiniEquipmentMarketPlace"
-                          : "https://github.com/Subramanyam6/Multi-Agent-War-Simulation-using-Reinforcement-Learning"
+                          : isMultiAgentRLWar 
+                          ? "https://github.com/Subramanyam6/Multi-Agent-War-Simulation-using-Reinforcement-Learning"
+                          : "https://github.com/Subramanyam6/California-Public-Info-GIS"
                       }
                       target="_blank" 
                       rel="noopener noreferrer"
@@ -189,7 +194,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                     </a>
                   )}
                   {/* Default Source Code Link for other projects */}
-                  {!isEquipmentMarketplace && !isMultiAgentRLWar && (
+                  {!isEquipmentMarketplace && !isMultiAgentRLWar && !isGISApplication && (
                     <Link 
                       to={`/projects/${project.slug}`} 
                       className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-white text-primary-600 font-medium border border-primary-100 transition-all duration-300 hover:shadow-lg hover:bg-primary-50 transform hover:-translate-y-1"

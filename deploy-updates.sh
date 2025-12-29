@@ -6,7 +6,7 @@ set -e
 echo "🚀 Starting Portfolio App Deployment..."
 
 # Set correct GCP project
-gcloud config set project portfolio-app-461419
+gcloud config set project resounding-node-468020-e8
 
 # Build and deploy backend
 echo "📦 Building and deploying backend..."
@@ -17,8 +17,8 @@ gcloud builds submit . --config=cloudbuild.yaml
 echo "⚙️  Updating environment variables..."
 gcloud run services update portfolio-backend \
   --region=us-central1 \
-  --set-env-vars="SPRING_PROFILES_ACTIVE=gcp,SENDGRID_FROM_EMAIL=subramanyam.duggirala@outlook.com,CORS_ALLOWED_ORIGINS=https://portfolio-frontend-93780733243.us-central1.run.app/" \
-  --set-secrets="SENDGRID_API_KEY=sendgrid-api-key:latest,JWT_SECRET=jwt-secret:latest"
+  --set-env-vars="SPRING_PROFILES_ACTIVE=gcp,POSTMARK_FROM_EMAIL=bduggirala2@huskers.unl.edu,CORS_ALLOWED_ORIGINS=https://portfolio-frontend-93780733243.us-central1.run.app/" \
+  --set-secrets="POSTMARK_SERVER_TOKEN=postmark-server-token:latest,JWT_SECRET=jwt-secret:latest"
 
 echo "✅ Deployment complete!"
 echo "🌐 Frontend: https://portfolio-frontend-93780733243.us-central1.run.app/"

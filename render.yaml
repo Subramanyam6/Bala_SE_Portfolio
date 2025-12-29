@@ -1,0 +1,78 @@
+# Render Blueprint for Portfolio Application
+# This file defines all services needed to deploy the portfolio on Render
+# Place this file in the root of your repository
+
+databases:
+  # Managed PostgreSQL Database
+  # Note: Free tier databases expire after 90 days of inactivity
+  - name: portfolio-database
+    databaseName: portfolio
+    user: portfolio_user
+    plan: free
+    region: oregon
+
+services:
+  # Backend Service
+  - type: web
+    name: portfolio-backend
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./portfolio-app/backend/Dockerfile
+    dockerContext: ./portfolio-app/backend
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: DATABASE_URL
+        fromDatabase:
+          name: portfolio-database
+          property: connectionString
+      - key: DB_USER
+        fromDatabase:
+          name: portfolio-database
+          property: user
+      - key: DB_PASS
+        fromDatabase:
+          name: portfolio-database
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: portfolio-database
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: portfolio-database
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: portfolio-database
+          property: database
+      - key: JWT_SECRET
+        sync: false  # You'll set this manually in Render dashboard
+      - key: POSTMARK_SERVER_TOKEN
+        sync: false  # You'll set this manually in Render dashboard
+      - key: POSTMARK_FROM_EMAIL
+        value: bduggirala2@huskers.unl.edu
+      - key: CORS_ALLOWED_ORIGINS
+        fromService:
+          type: web
+          name: portfolio-frontend
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Frontend Service
+  - type: web
+    name: portfolio-frontend
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./portfolio-app/frontend/Dockerfile
+    dockerContext: ./portfolio-app/frontend
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: portfolio-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: PORT
+        value: 10000

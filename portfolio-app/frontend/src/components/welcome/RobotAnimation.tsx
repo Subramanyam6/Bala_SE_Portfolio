@@ -29,6 +29,40 @@ const RobotAnimation: React.FC = () => {
     }
   };
 
+  // Ref to track an invisible interaction mesh that covers the full robot volume
+  const interactionMeshRef = useRef<THREE.Mesh | null>(null);
+  // --- INTERACTION MESH CREATOR -------------------------------------------------
+  // Adjust this value (in meters) if the invisible interaction mesh looks offset
+  // relative to the robot. Positive values move it UP, negatives move it DOWN.
+  const MESH_Y_ADJUST = 24.5; // ← tweak if bounding box sits too low/high
+
+  const createOrUpdateInteractionMesh = (object: THREE.Object3D) => {
+    // Compute bounding box in WORLD space first
+    const box = new THREE.Box3().setFromObject(object);
+    const size = box.getSize(new THREE.Vector3());
+    // Centre in world, then convert to OBJECT LOCAL space so we can attach mesh
+    const centerWorld = box.getCenter(new THREE.Vector3());
+    const centerLocal = object.worldToLocal(centerWorld); // now in object's coords
+
+    let mesh = interactionMeshRef.current;
+    if (!mesh) {
+      const geom = new THREE.BoxGeometry(size.x, size.y, size.z);
+      const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+      mesh = new THREE.Mesh(geom, mat);
+      interactionMeshRef.current = mesh;
+      // Attach mesh so it inherits robot transforms
+      object.add(mesh);
+    } else {
+      // Replace geometry to reflect new bounds
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+    }
+
+    // Position mesh at bounding-box centre with optional tweak
+    mesh.position.copy(centerLocal);
+    mesh.position.y += MESH_Y_ADJUST;
+  };
+
   useEffect(() => {
     if (!containerRef.current) return;
     
@@ -48,8 +82,8 @@ const RobotAnimation: React.FC = () => {
     camera.position.set(0, 1.5, 5.0); // Closer position for smaller container
     
     // Set up renderer with proper size - constrained to container
-    const containerWidth = containerRef.current.clientWidth;
-    const containerHeight = containerRef.current.clientHeight;
+    const containerWidth = containerRef.current.clientWidth || 350;
+    const containerHeight = containerRef.current.clientHeight || 300;
     // Sync camera aspect to container
     camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
@@ -196,7 +230,8 @@ const RobotAnimation: React.FC = () => {
         
         scene.add(robot);
 
-        // Simple approach - no complex interaction meshes needed
+        // Ensure hover / click cover the full body regardless of tiny geometry gaps
+        createOrUpdateInteractionMesh(robot);
 
         robot.traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).isMesh) {
@@ -258,6 +293,8 @@ const RobotAnimation: React.FC = () => {
       cube.receiveShadow = true;
       scene.add(cube);
       
+      // Create/update interaction mesh for fallback cube as well
+      createOrUpdateInteractionMesh(cube);
       
       // Set robotModel to reference the cube for consistent interaction handling
       robotModel = cube;
@@ -312,9 +349,9 @@ const RobotAnimation: React.FC = () => {
     const handleResize = () => {
       if (!containerRef.current) return;
 
-      // Use container dimensions for compact view
-      const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight;
+      // Use measured size or sensible defaults to avoid zero-dimension issues on first render
+      const containerWidth = containerRef.current.clientWidth || 350;
+      const containerHeight = containerRef.current.clientHeight || 300;
       
       camera.aspect = containerWidth / containerHeight;
       camera.updateProjectionMatrix();
@@ -333,8 +370,9 @@ const RobotAnimation: React.FC = () => {
       
       // Simple raycasting like the working test - check robot directly
       let isHoveringRobot = false;
-      if (robotModel) {
-        const intersects = ray.intersectObject(robotModel, true);
+      const targetForRay = interactionMeshRef.current || robotModel;
+      if (targetForRay) {
+        const intersects = ray.intersectObject(targetForRay, true);
         isHoveringRobot = intersects.length > 0;
       }
       const nowHovering = isHoveringRobot;
@@ -349,7 +387,7 @@ const RobotAnimation: React.FC = () => {
         }, 2000); // Prevent retrigger for 2 seconds
               }
         
-        hoverObj = isHoveringRobot ? robotModel : null;
+        hoverObj = isHoveringRobot ? targetForRay : null;
       
       // Update cursor based on hover state
       if (containerRef.current) {
@@ -363,13 +401,14 @@ const RobotAnimation: React.FC = () => {
       
       // Simple raycasting like the working test - check robot directly
       let isClickingRobot = false;
-      if (robotModel) {
-        const intersects = ray.intersectObject(robotModel, true);
+      const targetForRay = interactionMeshRef.current || robotModel;
+      if (targetForRay) {
+        const intersects = ray.intersectObject(targetForRay, true);
         isClickingRobot = intersects.length > 0;
       }
       
       // If clicking on robot and not already rotating, start rotation
-      if (isClickingRobot && robotModel && !isRotating) {
+      if (isClickingRobot && targetForRay && !isRotating) {
         isRotating = true;
         rotationAngle = 0;
       }
@@ -414,12 +453,13 @@ const RobotAnimation: React.FC = () => {
       
       // Simple raycasting like the working test - check robot directly
       let isHovering = false;
-      if (robotModel) {
-        const intersects = ray.intersectObject(robotModel, true);
+      const targetForRay = interactionMeshRef.current || robotModel;
+      if (targetForRay) {
+        const intersects = ray.intersectObject(targetForRay, true);
         isHovering = intersects.length > 0;
       }
       
-      hoverObj = isHovering ? robotModel : null;
+      hoverObj = isHovering ? targetForRay : null;
       
       // Update cursor based on hover state
       if (containerRef.current) {
