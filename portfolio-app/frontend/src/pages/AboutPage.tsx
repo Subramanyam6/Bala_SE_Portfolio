@@ -264,7 +264,7 @@ const AboutPage = () => {
               className="w-44 h-44 rounded-full overflow-hidden border-4 border-primary-600 shadow-lg flex-shrink-0 bg-gradient-to-br from-primary-100 to-primary-300 animate-fade-in-up"
             >
               <img
-                src="/Bala DP.jpg"
+                src="/Bala-DP.jpg"
                 alt="Bala Subramanyam Duggirala"
                 className="w-full h-full object-cover"
               />

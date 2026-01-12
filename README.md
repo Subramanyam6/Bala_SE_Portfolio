@@ -1,6 +1,6 @@
 # Bala Subramanyam - Software Engineering Portfolio
 
-This repository contains a full-stack portfolio website showcasing software engineering projects and professional experience.
+This repository contains a dockerized, full-stack portfolio website showcasing software engineering projects and professional experience.
 
 ## Project Structure
 
@@ -14,46 +14,35 @@ portfolio-app/
 
 ## Quick Start
 
-### Local Development
-
-1. **Backend** (Spring Boot + SQL Server)
-   ```bash
-   cd portfolio-app/backend
-   mvn spring-boot:run
-   ```
-
-2. **Frontend** (React + Vite)
-   ```bash
-   cd portfolio-app/frontend
-   npm run dev
-   ```
-
-### Docker Deployment
+### Docker (Recommended)
 ```bash
 cd portfolio-app
 docker-compose up -d
 ```
 
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080/api
+
+For non-Docker development, see `portfolio-app/README.md`.
+
 ## Documentation
 
 - [Project README](portfolio-app/README.md) - Detailed setup and development guide
-- [Azure Deployment Guide](portfolio-app/AZURE_DEPLOYMENT_SETUP.md) - Production deployment instructions
-- [Contact Form Setup](portfolio-app/README-CONTACT.md) - Email functionality configuration
+- [Render Quick Start](RENDER_QUICK_START.md) - Render deployment checklist
+- [Render Deployment Guide](RENDER_DEPLOYMENT_GUIDE.md) - Full Render setup
+- [Contact Form Setup](portfolio-app/README-CONTACT.md) - Email configuration
 
-## Live Deployments
+## Deployment
 
-- **Frontend**: Azure Static Web Apps
-- **Backend**: Azure App Service
-- **Database**: Azure SQL Database
+This app is prepared for Render using `render.yaml`. Deployments are planned on Render.
 
 ## Technologies
 
-- **Backend**: Spring Boot, Java 17, SQL Server, SendGrid
+- **Backend**: Spring Boot, Java 17, SQL Server (local Docker), PostgreSQL (Render), Postmark
 - **Frontend**: React, TypeScript, Tailwind CSS, Vite
-- **Infrastructure**: Azure, Docker, GitHub Actions
+- **Infrastructure**: Docker, Render
 
 ## Author
 
 **Bala Subramanyam Duggirala**
 - Email: subramanyam.duggirala@outlook.com
-- Portfolio: [Live Website](https://bala-portfolio.azurewebsites.net) 
