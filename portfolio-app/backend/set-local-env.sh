@@ -11,9 +11,6 @@ if [ -f "$ENV_FILE" ]; then
   set +a
 fi
 
-# Local database password (for Docker SQL Server)
-export LOCAL_DB_PASSWORD="${LOCAL_DB_PASSWORD:-MEMPShanmukh6!((}"
-
 # Postmark configuration
 export POSTMARK_SERVER_TOKEN="${POSTMARK_SERVER_TOKEN:-dummy-key-for-development}"
 export POSTMARK_FROM_EMAIL="${POSTMARK_FROM_EMAIL:-bduggirala2@huskers.unl.edu}"

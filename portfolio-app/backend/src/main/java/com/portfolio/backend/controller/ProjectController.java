@@ -3,7 +3,6 @@ package com.portfolio.backend.controller;
 import com.portfolio.backend.dto.ProjectDto;
 import com.portfolio.backend.service.ProjectService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProjectDto>> getAllProjects(
+    public ResponseEntity<List<ProjectDto>> getAllProjects(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "false") boolean onlyPublished) {
@@ -40,7 +39,7 @@ public class ProjectController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ProjectDto>> searchProjects(
+    public ResponseEntity<List<ProjectDto>> searchProjects(
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

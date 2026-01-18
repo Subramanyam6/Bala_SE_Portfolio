@@ -55,7 +55,6 @@ git push origin main
    - Click **"Connect"**
 
 3. **Render will automatically create**:
-   - PostgreSQL database
    - Backend service
    - Frontend service
 
@@ -85,9 +84,9 @@ git push origin main
 See the troubleshooting section in `RENDER_DEPLOYMENT_GUIDE.md`.
 
 Common issues:
-- **Backend won't start**: Check if database is ready (wait 2 minutes, then redeploy)
+- **Backend won't start**: Check the backend logs for missing env vars (JWT/POSTMARK)
 - **Contact form fails**: Verify Postmark sender email is verified
-- **CORS errors**: These should auto-resolve once all services are deployed
+- **CORS errors**: Ensure `CORS_ALLOWED_ORIGINS` matches the frontend URL
 
 ## 📊 Your URLs
 
@@ -108,7 +107,6 @@ See `RENDER_DEPLOYMENT_GUIDE.md` for comprehensive documentation including:
 - Detailed troubleshooting
 - Environment variables reference
 - Custom domain setup
-- Database backups
 - Upgrading from free tier
 
 ## 🚀 Time Estimate

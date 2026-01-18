@@ -1,27 +1,8 @@
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: portfolio-sqlserver
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "MEMPShanmukh6!(("
-    ports:
-      - "1433:1433"
-    volumes:
-      - sqlserver_data:/var/opt/mssql
-    networks:
-      - portfolio-network
-
   backend:
     build: ./backend
     container_name: portfolio-backend
-    depends_on:
-      - sqlserver
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=portfolio;encrypt=false
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: MEMPShanmukh6!((
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       JWT_SECRET: your-secret-key-here-should-be-very-long-and-secure-in-production
       CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5174,http://localhost:5173
     ports:
@@ -45,6 +26,3 @@ services:
 networks:
   portfolio-network:
     driver: bridge
-
-volumes:
-  sqlserver_data: 

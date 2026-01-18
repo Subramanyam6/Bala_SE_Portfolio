@@ -1,41 +1,16 @@
 package com.portfolio.backend.service.impl;
 
 import com.portfolio.backend.dto.ProjectDto;
-import com.portfolio.backend.dto.ProjectImageDto;
 import com.portfolio.backend.dto.TagDto;
 import com.portfolio.backend.dto.TechnologyDto;
-import com.portfolio.backend.dto.VideoDto;
-import com.portfolio.backend.exception.ResourceNotFoundException;
-import com.portfolio.backend.model.Project;
-import com.portfolio.backend.model.ProjectImage;
-import com.portfolio.backend.model.Tag;
-import com.portfolio.backend.model.Technology;
-import com.portfolio.backend.model.User;
-import com.portfolio.backend.model.Video;
-import com.portfolio.backend.repository.ProjectImageRepository;
-import com.portfolio.backend.repository.ProjectRepository;
-import com.portfolio.backend.repository.TagRepository;
-import com.portfolio.backend.repository.TechnologyRepository;
-import com.portfolio.backend.repository.UserRepository;
-import com.portfolio.backend.repository.VideoRepository;
 import com.portfolio.backend.service.ProjectService;
-import com.portfolio.backend.util.SlugUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -43,8 +18,7 @@ public class ProjectServiceImpl implements ProjectService {
     // No dependencies
     
     @Override
-    public Page<ProjectDto> getAllProjects(int page, int size, boolean onlyPublished) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<ProjectDto> getAllProjects(int page, int size, boolean onlyPublished) {
         List<ProjectDto> projects = new ArrayList<>();
         
         // Add more mock projects
@@ -55,11 +29,7 @@ public class ProjectServiceImpl implements ProjectService {
         projects.add(createMockProject(5L, "Weather Forecast App"));
         projects.add(createMockProject(6L, "Recipe Sharing Platform"));
         
-        return PageableExecutionUtils.getPage(
-            projects,
-            pageable,
-            () -> (long) projects.size()
-        );
+        return paginate(projects, page, size);
     }
 
     @Override
@@ -79,35 +49,39 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Page<ProjectDto> searchProjects(String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<ProjectDto> searchProjects(String keyword, int page, int size) {
         List<ProjectDto> projects = new ArrayList<>();
         projects.add(createMockProject(1L, "Search Result: " + keyword));
         projects.add(createMockProject(2L, "Another Result: " + keyword));
         
-        return PageableExecutionUtils.getPage(
-            projects,
-            pageable,
-            () -> 2L
-        );
+        return paginate(projects, page, size);
     }
 
     @Override
-    @Transactional
     public ProjectDto createProject(ProjectDto projectDto) {
         return createMockProject(1L, projectDto.getTitle());
     }
 
     @Override
-    @Transactional
     public ProjectDto updateProject(Long id, ProjectDto projectDto) {
         return createMockProject(id, projectDto.getTitle());
     }
 
     @Override
-    @Transactional
     public void deleteProject(Long id) {
         // Mock deletion, do nothing
+    }
+
+    private List<ProjectDto> paginate(List<ProjectDto> projects, int page, int size) {
+        if (size <= 0) {
+            return projects;
+        }
+        int fromIndex = Math.max(0, page * size);
+        if (fromIndex >= projects.size()) {
+            return List.of();
+        }
+        int toIndex = Math.min(projects.size(), fromIndex + size);
+        return projects.subList(fromIndex, toIndex);
     }
     
     private ProjectDto createMockProject(Long id, String title) {

@@ -2,15 +2,6 @@
 # This file defines all services needed to deploy the portfolio on Render
 # Place this file in the root of your repository
 
-databases:
-  # Managed PostgreSQL Database
-  # Note: Free tier databases expire after 90 days of inactivity
-  - name: portfolio-database
-    databaseName: portfolio
-    user: portfolio_user
-    plan: free
-    region: oregon
-
 services:
   # Backend Service
   - type: web
@@ -24,30 +15,6 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: DATABASE_URL
-        fromDatabase:
-          name: portfolio-database
-          property: connectionString
-      - key: DB_USER
-        fromDatabase:
-          name: portfolio-database
-          property: user
-      - key: DB_PASS
-        fromDatabase:
-          name: portfolio-database
-          property: password
-      - key: DB_HOST
-        fromDatabase:
-          name: portfolio-database
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: portfolio-database
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: portfolio-database
-          property: database
       - key: JWT_SECRET
         sync: false  # You'll set this manually in Render dashboard
       - key: POSTMARK_SERVER_TOKEN

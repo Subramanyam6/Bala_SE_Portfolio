@@ -17,9 +17,7 @@ A modern, full-stack portfolio application built with Spring Boot and React.
 ### Backend
 - Java 17 + Spring Boot 3.x
 - Spring MVC (RestController)
-- Spring Data JPA + Hibernate
-- SQL Server (local Docker) / PostgreSQL (Render)
-- Flyway for Database Migrations
+- In-memory mock data (no database)
 - Spring Security with JWT Authentication
 - Postmark for email delivery
 
@@ -75,27 +73,21 @@ A modern, full-stack portfolio application built with Spring Boot and React.
 
 #### Option 2: Without Docker
 
-1. **Start only the database:**
-   ```bash
-   cd portfolio-app
-   docker-compose up sqlserver -d
-   ```
-
-2. **Run the backend** (in one terminal):
+1. **Run the backend** (in one terminal):
    ```bash
    cd backend
    source set-local-env.sh
    mvn spring-boot:run -Dspring-boot.run.profiles=local
    ```
 
-3. **Run the frontend** (in another terminal):
+2. **Run the frontend** (in another terminal):
    ```bash
    cd frontend
    npm install  # Only needed first time
    npm run dev
    ```
 
-4. **Access:**
+3. **Access:**
    - Frontend: http://localhost:5174 (or port shown by Vite)
    - Backend: http://localhost:8080
 
@@ -109,16 +101,14 @@ A modern, full-stack portfolio application built with Spring Boot and React.
 ### App Not Accessible
 - **Frontend not loading**: Check `docker-compose logs frontend` for errors
 - **Backend not responding**: Check `docker-compose logs backend` for errors
-- **Database connection issues**: Ensure SQL Server container is running: `docker-compose ps`
 
 ### Memory/Storage
-- **High memory usage**: SQL Server uses ~1GB, Spring Boot uses ~250MB - this is normal
 - **Docker using too much space**: Run `docker system prune -a` to clean unused images (optional)
 
 ## Development
 
 ### Backend Development
-The backend is a Spring Boot application with a RESTful API. It uses Spring Data JPA for database access and Spring Security for authentication.
+The backend is a Spring Boot application with a RESTful API. It uses mock data and Spring Security for authentication.
 
 ### Frontend Development
 The frontend is a React application built with TypeScript and Tailwind CSS. It uses React Router for navigation and React Query for data fetching.

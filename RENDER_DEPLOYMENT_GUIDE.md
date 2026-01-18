@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide will walk you through deploying your full-stack portfolio application (Spring Boot backend + React frontend + PostgreSQL database) on Render's free tier.
+This guide will walk you through deploying your full-stack portfolio application (Spring Boot backend + React frontend) on Render's free tier.
 
 ## Prerequisites
 
@@ -18,7 +18,6 @@ This guide will walk you through deploying your full-stack portfolio application
 - **Free Tier Limitations**:
   - Backend and frontend services spin down after 15 minutes of inactivity
   - First request after inactivity takes 30-60 seconds (cold start)
-  - PostgreSQL database is deleted after 90 days of inactivity
   - 750 hours/month of runtime (shared across all services)
 
 - **Cost**: Completely free if you stay within limits
@@ -79,12 +78,6 @@ openssl rand -base64 64
 
 These are automatically configured via `render.yaml` - **you don't need to set these**:
 - `SPRING_PROFILES_ACTIVE=render`
-- `DATABASE_URL` (from PostgreSQL database)
-- `DB_USER` (from PostgreSQL database)
-- `DB_PASS` (from PostgreSQL database)
-- `DB_HOST` (from PostgreSQL database)
-- `DB_PORT` (from PostgreSQL database)
-- `DB_NAME` (from PostgreSQL database)
 - `CORS_ALLOWED_ORIGINS` (from frontend URL)
 
 #### For Frontend Service (`portfolio-frontend`):
@@ -97,7 +90,6 @@ Automatically configured via `render.yaml`:
 
 1. After adding the secret environment variables to backend service, click **"Apply"** or **"Save Changes"**
 2. Render will automatically:
-   - Create PostgreSQL database (`portfolio-database`)
    - Build and deploy backend service (`portfolio-backend`)
    - Build and deploy frontend service (`portfolio-frontend`)
    - Configure all networking and environment variables
@@ -106,7 +98,6 @@ Automatically configured via `render.yaml`:
    - Click on each service to see build logs
    - Backend build takes ~5-10 minutes (Maven build + Docker)
    - Frontend build takes ~3-5 minutes (npm build + Docker)
-   - Database is created instantly
 
 ### Step 5: Verify Deployment
 
@@ -163,16 +154,11 @@ To use a custom domain instead of `*.onrender.com`:
 
 **Common issues**:
 
-1. **Database connection failed**:
-   - Verify database is created and running
-   - Check if `DB_*` environment variables are set
-   - Solution: Wait for database to be fully created, then redeploy backend
-
-2. **Missing JWT_SECRET**:
+1. **Missing JWT_SECRET**:
    - Error: "JWT secret is required"
    - Solution: Add `JWT_SECRET` environment variable to backend service
 
-3. **Port binding error**:
+2. **Port binding error**:
    - Ensure `application-render.properties` has `server.port=10000`
    - Render expects services to listen on port 10000
 
@@ -206,17 +192,6 @@ To use a custom domain instead of `*.onrender.com`:
 3. **Check backend logs**:
    - Look for errors related to email sending
    - Postmark returns detailed error messages
-
-### Database Connection Issues
-
-1. **Database not ready**:
-   - If backend starts before database is ready, it may fail
-   - Solution: Wait 1-2 minutes, then click "Manual Deploy" on backend
-
-2. **Connection pool exhausted**:
-   - Free tier has connection limits
-   - `application-render.properties` already configures pool size (max 5)
-   - If you see this error, database may be overloaded
 
 ### Cold Starts (Slow First Request)
 
@@ -253,23 +228,6 @@ If auto-deploy doesn't trigger:
 3. Click **"Logs"** tab
 4. View real-time logs (helps with debugging)
 
-### Database Backups
-
-**Important**: Free tier databases are deleted after 90 days of inactivity.
-
-**To backup**:
-1. Use Render's built-in backup (manual)
-2. Or use `pg_dump`:
-   ```bash
-   # Get database URL from Render dashboard
-   pg_dump <DATABASE_URL> > backup.sql
-   ```
-
-**To restore**:
-```bash
-psql <DATABASE_URL> < backup.sql
-```
-
 ## Environment Variables Reference
 
 ### Backend (`portfolio-backend`)
@@ -277,12 +235,6 @@ psql <DATABASE_URL> < backup.sql
 | Variable | Source | Required | Description |
 |----------|--------|----------|-------------|
 | `SPRING_PROFILES_ACTIVE` | Manual | Yes | Set to `render` |
-| `DATABASE_URL` | Auto (from DB) | Yes | PostgreSQL connection string |
-| `DB_USER` | Auto (from DB) | Yes | Database username |
-| `DB_PASS` | Auto (from DB) | Yes | Database password |
-| `DB_HOST` | Auto (from DB) | Yes | Database host |
-| `DB_PORT` | Auto (from DB) | Yes | Database port (5432) |
-| `DB_NAME` | Auto (from DB) | Yes | Database name |
 | `JWT_SECRET` | Manual | Yes | JWT signing secret (64+ chars) |
 | `POSTMARK_SERVER_TOKEN` | Manual | Yes | Postmark API token |
 | `POSTMARK_FROM_EMAIL` | Auto | Yes | Sender email (verified in Postmark) |
@@ -297,7 +249,6 @@ psql <DATABASE_URL> < backup.sql
 
 ## Cost Breakdown (Free Tier)
 
-- **PostgreSQL Database**: Free (with 90-day inactivity limit)
 - **Backend Service**: Free (750 hours/month)
 - **Frontend Service**: Free (750 hours/month)
 - **Bandwidth**: 100 GB/month free
@@ -309,11 +260,9 @@ psql <DATABASE_URL> < backup.sql
 
 If you need:
 - No cold starts (always-on)
-- More than 90 days database retention
 - More resources
 
 **Recommended plans**:
-- **Database**: $7/month (no expiration)
 - **Web Services**: $7/month each (always-on, more resources)
 
 ## Getting Help
@@ -336,12 +285,6 @@ openssl rand -base64 64
 ### Check Backend Health
 ```bash
 curl https://portfolio-backend.onrender.com/actuator/health
-```
-
-### View Database Connection Info
-```bash
-# In Render dashboard → Database → Connection Info
-# Internal URL (use this): postgres://user:pass@host:5432/db
 ```
 
 ## What You Need to Do
@@ -372,7 +315,6 @@ curl https://portfolio-backend.onrender.com/actuator/health
 Your portfolio will be accessible at:
 - **Frontend**: `https://portfolio-frontend.onrender.com`
 - **Backend**: `https://portfolio-backend.onrender.com`
-- **Database**: Internal PostgreSQL (managed by Render)
 
 After deployment, your app will:
 - ✅ Auto-deploy on every git push

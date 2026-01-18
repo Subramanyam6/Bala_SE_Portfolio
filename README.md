@@ -38,7 +38,7 @@ This app is prepared for Render using `render.yaml`. Deployments are planned on 
 
 ## Technologies
 
-- **Backend**: Spring Boot, Java 17, SQL Server (local Docker), PostgreSQL (Render), Postmark
+- **Backend**: Spring Boot, Java 17, Postmark (no database; mock data)
 - **Frontend**: React, TypeScript, Tailwind CSS, Vite
 - **Infrastructure**: Docker, Render
 
