@@ -100,11 +100,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             )}
             <iframe
               ref={iframeRef}
-              src={`${project.pdfPath}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
+              src={`${encodeURI(project.pdfPath)}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
               className={`w-full h-full border-0 ${isThesisCard ? 'relative z-10' : ''}`}
               title={project.title + ' PDF Document'}
               loading="lazy"
               onLoad={handleIframeLoad}
+              allow="fullscreen"
             />
           </div>
         ) : shouldShowLivePreview ? (
