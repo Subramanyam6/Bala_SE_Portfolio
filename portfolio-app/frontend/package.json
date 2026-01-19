@@ -37,6 +37,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@types/node": "^25.0.9",
     "@types/react": "^18.3.21",
     "@types/react-dom": "^18.2.0",
     "@types/react-router-dom": "^5.3.3",
