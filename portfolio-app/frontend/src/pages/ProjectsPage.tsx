@@ -12,6 +12,7 @@ interface Project {
   thumbnail: string | null;
   technologies: string[];
   liveUrl?: string;
+  previewUrl?: string;
   hasPdf: boolean;
   pdfPath: string;
 }

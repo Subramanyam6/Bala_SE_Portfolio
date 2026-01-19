@@ -14,6 +14,7 @@ interface Project {
   thumbnail: string | null;
   technologies: string[] | Technology[];
   liveUrl?: string;
+  previewUrl?: string;
   hasPdf: boolean;
   pdfPath: string;
 }
@@ -26,12 +27,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showAllTechnologies, setShowAllTechnologies] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const [iframeScale, setIframeScale] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
   const isMultiAgentRLWar = project.slug === 'multi-agent-rl-war';
-  const isLiteratureReview = project.slug === 'literature-review-rl-mas';
-  const isNewProject = !isEquipmentMarketplace && !isMultiAgentRLWar && !isLiteratureReview;
+  const iframeUrl = project.previewUrl || project.liveUrl;
+  const hasIframeUrl = Boolean(iframeUrl);
+  const isNewProject = !hasIframeUrl && !project.hasPdf;
+  const shouldShowLivePreview = hasIframeUrl && !project.hasPdf;
+  const iframeViewportWidth = 1280;
+  const iframeViewportHeight = 720;
   const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/600x400?text=No+Image';
 
   useEffect(() => {
@@ -48,6 +55,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!previewContainerRef.current) return;
+
+    const container = previewContainerRef.current;
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+
+      const { width, height } = entry.contentRect;
+      if (!width || !height) return;
+
+      const scaleX = width / iframeViewportWidth;
+      const scaleY = height / iframeViewportHeight;
+      setIframeScale(Math.min(scaleX, scaleY));
+    });
+
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, [iframeViewportHeight, iframeViewportWidth]);
+
   const handleIframeLoad = () => {
     setIsIframeLoading(false);
   };
@@ -60,7 +88,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div 
-        className="relative overflow-hidden h-48"
+        className="relative overflow-hidden w-full"
+        style={{ aspectRatio: '16 / 9' }}
       >
         {project.hasPdf && project.pdfPath ? (
           <div className="w-full h-full relative">
@@ -81,8 +110,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               onLoad={handleIframeLoad}
             />
           </div>
-        ) : (isEquipmentMarketplace || isMultiAgentRLWar) ? (
-          <div className="w-full h-full relative">
+        ) : shouldShowLivePreview ? (
+          <div ref={previewContainerRef} className="w-full h-full relative">
             {isIframeLoading && (
               <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center z-10">
                 <div className="flex flex-col items-center">
@@ -101,11 +130,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             )}
             <iframe
               ref={iframeRef}
-              src={project.liveUrl}
+              src={iframeUrl}
               className="w-full h-full border-0"
               title={project.title + ' Live Demo'}
               loading="lazy"
               sandbox="allow-same-origin allow-scripts"
+              style={{
+                width: `${iframeViewportWidth}px`,
+                height: `${iframeViewportHeight}px`,
+                transform: `scale(${iframeScale})`,
+                transformOrigin: 'top left',
+              }}
               onLoad={handleIframeLoad}
             />
           </div>
@@ -128,7 +163,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         )}
         
         {/* Hover overlay with buttons */}
-        {isHovered && !isNewProject && !isLiteratureReview && (
+        {isHovered && !isNewProject && (
           <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center transition-opacity duration-300 p-4">
             <div className="space-y-3 w-full max-w-xs">
               {project.hasPdf && project.pdfPath ? (
@@ -191,7 +226,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                   {/* Default Source Code Link for other projects */}
                   {!isEquipmentMarketplace && !isMultiAgentRLWar && (
                     <Link 
-                      to={`/projects/${project.slug}`} 
+                      to={`/home/projects/${project.slug}`} 
                       className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-white text-primary-600 font-medium border border-primary-100 transition-all duration-300 hover:shadow-lg hover:bg-primary-50 transform hover:-translate-y-1"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

@@ -2,8 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 
 const pdfMap: Record<string, { title: string; path: string }> = {
   'literature-review-rl-mas': {
-    title: 'A Literature Review on RL in Single & Multi-Agent Systems, its Scalability, and Applications',
+    title: 'Literature Review Document',
     path: '/Literature Review Document.pdf',
+  },
+  'my-thesis': {
+    title: 'My Thesis',
+    path: '/Investigating the Impact of Agent Openness on Planning in Multi-a.pdf',
   },
 };
 
