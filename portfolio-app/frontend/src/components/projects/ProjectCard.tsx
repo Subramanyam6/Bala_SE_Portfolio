@@ -89,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       style={{ aspectRatio: '16 / 9' }}
     >
         {project.hasPdf && project.pdfPath ? (
-          <div className="w-full h-full relative">
+          <div className={`w-full h-full relative ${isThesisCard ? 'z-10' : ''}`}>
             {isIframeLoading && (
               <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
                 <div className="flex flex-col items-center">
@@ -101,7 +101,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <iframe
               ref={iframeRef}
               src={`${project.pdfPath}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
-              className="w-full h-full border-0"
+              className={`w-full h-full border-0 ${isThesisCard ? 'relative z-10' : ''}`}
               title={project.title + ' PDF Document'}
               loading="lazy"
               onLoad={handleIframeLoad}

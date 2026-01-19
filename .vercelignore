@@ -1,0 +1,7 @@
+node_modules
+.env.local
+.env.*.local
+portfolio-app/backend/
+portfolio-app/docker-compose.yml
+.git
+.DS_Store

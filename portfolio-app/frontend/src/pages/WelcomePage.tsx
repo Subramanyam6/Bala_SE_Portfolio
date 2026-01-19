@@ -1,10 +1,5 @@
-declare global {
-  interface Window {
-    popupTimeoutRef?: ReturnType<typeof setTimeout>;
-  }
-}
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RobotAnimation from '../components/welcome/RobotAnimation';
 import Particles from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
@@ -22,25 +17,12 @@ const customStyles = `
     50% { text-shadow: 0 0 60px rgba(14, 165, 233, 0.7), 0 0 80px rgba(2, 132, 199, 0.5); }
   }
   
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  
   .float-animation {
     animation: float 6s ease-in-out infinite;
   }
   
   .glow-animation {
     animation: glow 4s ease-in-out infinite;
-  }
-  
-  .shimmer-text {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 3s infinite;
-    -webkit-background-clip: text;
-    background-clip: text;
   }
   
   .glass-morphism {
@@ -100,76 +82,8 @@ const GreetingTransition: React.FC<{ loaded: boolean }> = ({ loaded }) => {
   );
 };
 
-// Contact Popup Component
-const ContactPopup: React.FC<{ isVisible: boolean; onClose: () => void; setShowCopyBanner: (show: boolean) => void }> = ({
-  isVisible,
-  onClose,
-  setShowCopyBanner,
-}) => {
-  const navigate = useNavigate();
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText('bduggirala2@huskers.unl.edu');
-      setShowCopyBanner(true);
-      setTimeout(() => setShowCopyBanner(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy email:', err);
-    }
-    onClose();
-  };
-
-  const goToContact = () => {
-    navigate('/home/contact');
-    onClose();
-  };
-
-  if (!isVisible) return null;
-
-  return (
-    <div
-      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-0 z-50 bg-white/90 rounded-2xl shadow-xl border border-gray-300 p-4 w-72 backdrop-blur-md transition-all duration-300"
-      data-contact-popup="true"
-      style={{
-        animation: isVisible ? 'popup-appear 0.5s ease-out forwards' : 'popup-disappear 0.5s ease-in forwards',
-      }}
-    >
-      <div className="space-y-3">
-        <button
-          onClick={goToContact}
-          className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-all duration-150 border border-transparent hover:border-primary-200 group"
-        >
-          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 mr-3 group-hover:scale-110 transition-transform">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </span>
-          <span className="group-hover:translate-x-1 transition-transform duration-150 font-medium text-left">This website can send emails to Bala!</span>
-        </button>
-
-        <button
-          onClick={copyEmail}
-          className="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-150 border border-transparent hover:border-blue-200 group"
-        >
-          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 mr-3 group-hover:scale-110 transition-transform">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-          </span>
-          <span className="group-hover:translate-x-1 transition-transform duration-150 font-medium text-left">Or Copy Bala's Email</span>
-        </button>
-      </div>
-
-      {/* Tooltip arrow */}
-      <div className="absolute left-0 top-0 transform -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white/90 border border-gray-300 w-4 h-4 shadow-md backdrop-blur-md" />
-    </div>
-  );
-};
-
 const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
-  const [contactPopupVisible, setContactPopupVisible] = useState(false);
-  const [showCopyBanner, setShowCopyBanner] = useState(false);
 
   const particlesInit = async (engine: Engine) => {
     await loadSlim(engine);
@@ -188,63 +102,15 @@ const WelcomePage: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleContactClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    setContactPopupVisible(true);
-  };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('[data-contact-popup]') && !target.closest('[data-contact-button]')) {
-      setContactPopupVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    if (contactPopupVisible) {
-      document.addEventListener('click', handleClickOutside);
-      return () => {
-        document.removeEventListener('click', handleClickOutside);
-      };
-    }
-  }, [contactPopupVisible]);
-
-  const closePopup = () => {
-    setContactPopupVisible(false);
-    if (window.popupTimeoutRef) {
-      clearTimeout(window.popupTimeoutRef);
-    }
-  };
-
   return (
     <>
       {/* Inject custom styles */}
       <style
         dangerouslySetInnerHTML={{
-          __html:
-            customStyles +
-            `
-        @keyframes popup-appear {
-          from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes popup-disappear {
-          from { opacity: 1; transform: translateY(0) scale(1); }
-          to { opacity: 0; transform: translateY(-10px) scale(0.95); }
-        }
-      `,
+          __html: customStyles,
         }}
       />
 
-      {/* Copy banner */}
-      {showCopyBanner && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-          Email copied to clipboard!
-        </div>
-      )}
-
-      {/* Contact Popup removed from here */}
-      
       <div 
         className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-r from-primary-600 to-primary-400 text-white w-screen"
       >
@@ -360,30 +226,13 @@ const WelcomePage: React.FC = () => {
               </div>
               
               {/* Robot positioned to float above separator line */}
-              <div className="relative flex justify-center">
-                <div 
-                  className={`absolute opacity-0 transition-all duration-1000 delay-300 ${loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}
-                  style={{ 
-                    height: '300px', 
-                    width: '350px',
-                    right: '-0%', // Slightly more to the right
-                    top: '-240px', // Position so robot's feet touch the separator line
-                    pointerEvents: 'auto' // Ensure robot is interactive
-                  }}
-                  onMouseEnter={() => {
-                    // Add hover effect
-                  }}
-                  onMouseLeave={() => {
-                    // Remove hover effect
-                  }}
-                  onClick={() => {
-                    // Handle click
-                  }}
+              <div className="relative h-0">
+                <div
+                  className={`absolute right-0 -top-[240px] h-[300px] w-[350px] pointer-events-auto z-30 opacity-0 transition-all duration-1000 delay-300 ${
+                    loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'
+                  }`}
                 >
-                  <div 
-                    style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-                    className="hover:scale-105 transition-transform duration-300"
-                  >
+                  <div className="h-full w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <RobotAnimation />
                   </div>
                 </div>
@@ -417,8 +266,7 @@ const WelcomePage: React.FC = () => {
                 </p>
                 
                 <p className="text-base sm:text-lg text-white/80 mt-4 leading-relaxed">
-                  Crafting modern web experiences and exploring intelligent solutions 
-                  <span className="inline-block ml-2 animate-bounce">🚀</span>
+                  Crafting modern web experiences and exploring intelligent solutions
                 </p>
               </div>
             </div>
@@ -442,10 +290,8 @@ const WelcomePage: React.FC = () => {
               Explore Portfolio
             </Link>
             <div className="relative inline-block">
-              <a
-                href="#contact"
-                onClick={handleContactClick}
-                data-contact-button="true"
+              <Link
+                to="/home/contact"
                 className={`inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/90 text-primary-700 font-semibold shadow-md 
      transform transition-all duration-300 ease-in-out 
      hover:scale-105 hover:shadow-2xl 
@@ -455,12 +301,7 @@ const WelcomePage: React.FC = () => {
      opacity-0 delay-600 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
               >
                 Get In Touch
-              </a>
-              <ContactPopup
-                isVisible={contactPopupVisible}
-                onClose={closePopup}
-                setShowCopyBanner={setShowCopyBanner}
-              />
+              </Link>
             </div>
           </div>
 
