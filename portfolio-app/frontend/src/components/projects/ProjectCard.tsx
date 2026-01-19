@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import ElectricBorder from '../ElectricBorder';
 
 interface Technology {
   id?: number;
@@ -33,6 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const previewContainerRef = useRef<HTMLDivElement>(null);
   const isEquipmentMarketplace = project.title.includes('Equipment Marketplace');
   const isMultiAgentRLWar = project.slug === 'multi-agent-rl-war';
+  const isThesisCard = project.slug === 'my-thesis';
   const iframeUrl = project.previewUrl || project.liveUrl;
   const hasIframeUrl = Boolean(iframeUrl);
   const isNewProject = !hasIframeUrl && !project.hasPdf;
@@ -80,17 +82,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     setIsIframeLoading(false);
   };
 
-  return (
+  // Upper portion: image/iframe/PDF display area
+  const upperPortion = (
     <div 
-      ref={cardRef}
-      className="card group overflow-hidden transition-all duration-300 hover:shadow-lg relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="relative overflow-hidden w-full"
+      style={{ aspectRatio: '16 / 9' }}
     >
-      <div 
-        className="relative overflow-hidden w-full"
-        style={{ aspectRatio: '16 / 9' }}
-      >
         {project.hasPdf && project.pdfPath ? (
           <div className="w-full h-full relative">
             {isIframeLoading && (
@@ -240,45 +237,75 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             </div>
           </div>
         )}
-      </div>
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
-          {project.title}
-        </h3>
-        {project.description && (
-          <p className={`text-gray-600 mb-4 transition-all duration-300 ${isHovered ? '' : 'line-clamp-2'}`}>
-            {project.description}
-          </p>
-        )}
-        {project.technologies && project.technologies.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {(showAllTechnologies ? project.technologies : project.technologies.slice(0, 3)).map((tech, index) => (
-              <span
-                key={index}
-                className="inline-block bg-gray-100 rounded-full px-3 py-1 text-xs font-semibold text-gray-700"
-              >
-                {typeof tech === 'string' ? tech : tech.name}
-              </span>
-            ))}
-            {project.technologies.length > 3 && !showAllTechnologies && (
-              <button
-                onClick={() => setShowAllTechnologies(true)}
-                className="inline-block bg-primary-100 hover:bg-primary-200 rounded-full px-3 py-1 text-xs font-semibold text-primary-700 transition-colors duration-200 cursor-pointer"
-              >
-                +{project.technologies.length - 3} more
-              </button>
-            )}
-            {showAllTechnologies && project.technologies.length > 3 && (
-              <button
-                onClick={() => setShowAllTechnologies(false)}
-                className="inline-block bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 transition-colors duration-200 cursor-pointer"
-              >
-                Show less
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+    </div>
+  );
+
+  // Lower portion: text details section
+  const lowerPortion = (
+    <div className="p-6">
+      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-300">
+        {project.title}
+      </h3>
+      {project.description && (
+        <p className={`text-gray-600 mb-4 transition-all duration-300 ${isHovered ? '' : 'line-clamp-2'}`}>
+          {project.description}
+        </p>
+      )}
+      {project.technologies && project.technologies.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {(showAllTechnologies ? project.technologies : project.technologies.slice(0, 3)).map((tech, index) => (
+            <span
+              key={index}
+              className="inline-block bg-gray-100 rounded-full px-3 py-1 text-xs font-semibold text-gray-700"
+            >
+              {typeof tech === 'string' ? tech : tech.name}
+            </span>
+          ))}
+          {project.technologies.length > 3 && !showAllTechnologies && (
+            <button
+              onClick={() => setShowAllTechnologies(true)}
+              className="inline-block bg-primary-100 hover:bg-primary-200 rounded-full px-3 py-1 text-xs font-semibold text-primary-700 transition-colors duration-200 cursor-pointer"
+            >
+              +{project.technologies.length - 3} more
+            </button>
+          )}
+          {showAllTechnologies && project.technologies.length > 3 && (
+            <button
+              onClick={() => setShowAllTechnologies(false)}
+              className="inline-block bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 transition-colors duration-200 cursor-pointer"
+            >
+              Show less
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  // Wrap only the upper portion with ElectricBorder for thesis card
+  const wrappedUpperPortion = isThesisCard ? (
+    <div className="relative" style={{ padding: '8px' }}>
+      <ElectricBorder 
+        color="#0284c7" 
+        speed={1.5} 
+        chaos={0.12} 
+        borderRadius={12}
+        className="rounded-lg"
+      >
+        {upperPortion}
+      </ElectricBorder>
+    </div>
+  ) : upperPortion;
+
+  return (
+    <div 
+      ref={cardRef}
+      className={`card group transition-all duration-300 hover:shadow-lg relative ${isThesisCard ? 'overflow-visible' : 'overflow-hidden'}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {wrappedUpperPortion}
+      {lowerPortion}
     </div>
   );
 };
