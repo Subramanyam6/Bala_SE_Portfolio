@@ -60,3 +60,19 @@
   opacity: 0.3;
   background: linear-gradient(-30deg, var(--electric-light-color), transparent, var(--electric-border-color));
 }
+
+.electric-border.thunder-border .eb-glow-1 {
+  border: 2px solid oklch(from var(--electric-border-color) l c h / 0.8);
+  filter: blur(2px);
+}
+
+.electric-border.thunder-border .eb-glow-2 {
+  border: 3px solid var(--electric-light-color);
+  filter: blur(6px);
+}
+
+.electric-border.thunder-border .eb-background-glow {
+  transform: scale(1.15);
+  filter: blur(48px);
+  opacity: 0.55;
+}

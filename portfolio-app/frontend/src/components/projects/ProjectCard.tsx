@@ -42,6 +42,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const iframeViewportWidth = 1280;
   const iframeViewportHeight = 720;
   const thumbnailUrl = project.thumbnail || 'https://via.placeholder.com/600x400?text=No+Image';
+  const pdfHref = project.pdfPath ? encodeURI(project.pdfPath) : '';
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -100,7 +101,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             )}
             <iframe
               ref={iframeRef}
-              src={`${encodeURI(project.pdfPath)}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
+              src={`${pdfHref}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0&view=FitH`}
               className={`w-full h-full border-0 ${isThesisCard ? 'relative z-10' : ''}`}
               title={project.title + ' PDF Document'}
               loading="lazy"
@@ -167,7 +168,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               {project.hasPdf && project.pdfPath ? (
                 <>
                   <a 
-                    href={project.pdfPath} 
+                    href={pdfHref} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium transition-all duration-300 hover:shadow-lg hover:from-primary-600 hover:to-primary-700 transform hover:-translate-y-1"
@@ -178,7 +179,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                     View
                   </a>
                   <a 
-                    href={project.pdfPath} 
+                    href={pdfHref} 
                     download
                     className="w-full flex justify-center items-center px-4 py-2 rounded-full bg-white text-primary-600 font-medium border border-primary-100 transition-all duration-300 hover:shadow-lg hover:bg-primary-50 transform hover:-translate-y-1"
                   >
@@ -287,11 +288,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const wrappedUpperPortion = isThesisCard ? (
     <div className="relative" style={{ padding: '8px' }}>
       <ElectricBorder 
-        color="#0284c7" 
-        speed={1.5} 
-        chaos={0.12} 
+        color="#7c3aed" 
+        speed={1.7} 
+        chaos={0.16} 
         borderRadius={12}
-        className="rounded-lg"
+        className="rounded-lg thunder-border"
       >
         {upperPortion}
       </ElectricBorder>

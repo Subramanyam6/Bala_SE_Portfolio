@@ -1,5 +1,5 @@
 // src/components/layout/RobotAnimation.tsx
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -23,14 +23,28 @@ const RobotAnimation: React.FC = () => {
   
   // Remove debug logs in production
   const isProduction = true;
-  const logDebug = (message: string) => {
+  const logDebug = useCallback((message: string) => {
     if (!isProduction) {
       setDebugInfo(prevInfo => prevInfo + message + '\n');
     }
-  };
+  }, [isProduction]);
+
+  // Helper function to check WebGL availability
+  const webglAvailable = useCallback((): boolean => {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(
+        window.WebGLRenderingContext && 
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+      );
+    } catch (e) {
+      return false;
+    }
+  }, []);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
     
     // Check if WebGL is available
     if (!webglAvailable()) {
@@ -48,8 +62,8 @@ const RobotAnimation: React.FC = () => {
     camera.position.set(0, 1.5, 5.0); // Closer position for smaller container
     
     // Set up renderer with proper size - constrained to container
-    const containerWidth = containerRef.current.clientWidth;
-    const containerHeight = containerRef.current.clientHeight;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
     // Sync camera aspect to container
     camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
@@ -77,7 +91,7 @@ const RobotAnimation: React.FC = () => {
       console.warn('Could not set color space/encoding:', err);
     }
     
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     // Lights & grid
     scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2.2));
@@ -310,11 +324,9 @@ const RobotAnimation: React.FC = () => {
 
     // Event handlers
     const handleResize = () => {
-      if (!containerRef.current) return;
-
       // Use container dimensions for compact view
-      const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight;
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
       
       camera.aspect = containerWidth / containerHeight;
       camera.updateProjectionMatrix();
@@ -322,9 +334,7 @@ const RobotAnimation: React.FC = () => {
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!containerRef.current) return;
-      
-      const rect = containerRef.current.getBoundingClientRect();
+      const rect = container.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       
@@ -352,12 +362,10 @@ const RobotAnimation: React.FC = () => {
         hoverObj = isHoveringRobot ? robotModel : null;
       
       // Update cursor based on hover state
-      if (containerRef.current) {
-        containerRef.current.style.cursor = isHoveringRobot ? 'pointer' : 'default';
-      }
+      container.style.cursor = isHoveringRobot ? 'pointer' : 'default';
     };
 
-        const handleClick = () => {
+    const handleClick = () => {
       // Check if clicking on robot using the same logic as hover
       ray.setFromCamera(mouse, camera);
       
@@ -377,10 +385,8 @@ const RobotAnimation: React.FC = () => {
 
     // Add event listeners
     window.addEventListener('resize', handleResize);
-    if (containerRef.current) {
-      containerRef.current.addEventListener('pointermove', handlePointerMove);
-      containerRef.current.addEventListener('click', handleClick);
-    }
+    container.addEventListener('pointermove', handlePointerMove);
+    container.addEventListener('click', handleClick);
 
     // Animation loop
     const clock = new THREE.Clock();
@@ -422,8 +428,8 @@ const RobotAnimation: React.FC = () => {
       hoverObj = isHovering ? robotModel : null;
       
       // Update cursor based on hover state
-      if (containerRef.current) {
-        containerRef.current.style.cursor = hoverObj ? 'pointer' : 'default';
+      if (container) {
+        container.style.cursor = hoverObj ? 'pointer' : 'default';
       }
 
       renderer.render(scene, camera);
@@ -438,31 +444,15 @@ const RobotAnimation: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       
       // Store reference for cleanup
-      const container = containerRef.current;
-      if (container) {
-        container.removeEventListener('pointermove', handlePointerMove);
-        container.removeEventListener('click', handleClick);
-        container.style.cursor = 'default';
-        
-        if (renderer.domElement && container.contains(renderer.domElement)) {
-          container.removeChild(renderer.domElement);
-        }
+      container.removeEventListener('pointermove', handlePointerMove);
+      container.removeEventListener('click', handleClick);
+      container.style.cursor = 'default';
+      
+      if (renderer.domElement && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
       }
     };
-  }, [loadingAttempt]);
-
-  // Helper function to check WebGL availability
-  const webglAvailable = (): boolean => {
-    try {
-      const canvas = document.createElement('canvas');
-      return !!(
-        window.WebGLRenderingContext && 
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-      );
-    } catch (e) {
-      return false;
-    }
-  };
+  }, [loadingAttempt, logDebug, webglAvailable]);
 
   // Allow retrying model loading with a different URL
   const handleRetryLoad = () => {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import RobotAnimation from '../components/welcome/RobotAnimation';
 import Hyperspeed from '../components/Hyperspeed';
 import { hyperspeedPresets } from '../components/HyperSpeedPresets';
+import { GitHubIcon, GITHUB_URL, LinkedInIcon, LINKEDIN_URL } from '../components/SocialIcons';
 
 // Custom CSS for advanced animations
 const customStyles = `
@@ -33,6 +34,116 @@ const customStyles = `
   
   .button-glow:hover {
     box-shadow: 0 0 24px rgba(2, 132, 199, 0.45), 0 0 48px rgba(56, 189, 248, 0.3);
+  }
+  @keyframes glitch-shift {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(1px, -1px); }
+    40% { transform: translate(-1px, 1px); }
+    60% { transform: translate(2px, 0); }
+    80% { transform: translate(-2px, -1px); }
+  }
+
+  @keyframes scanline {
+    0% { background-position: 0 0; opacity: 0.6; }
+    100% { background-position: 0 100%; opacity: 0.2; }
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(56, 189, 248, 0.45); }
+    30% { opacity: 0.85; text-shadow: 0 0 16px rgba(56, 189, 248, 0.55); }
+    60% { opacity: 0.95; text-shadow: 0 0 8px rgba(34, 197, 94, 0.35); }
+    80% { opacity: 0.9; text-shadow: 0 0 14px rgba(56, 189, 248, 0.5); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .glitch-date {
+    position: relative;
+    font-family: "Courier New", Courier, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8, #0ea5e9);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite, flicker 2.8s infinite;
+  }
+
+  .glitch-date::before,
+  .glitch-date::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    animation: glitch-shift 2s infinite;
+  }
+
+  .glitch-date::before {
+    color: #38bdf8;
+    opacity: 0.7;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  }
+
+  .glitch-date::after {
+    color: #22c55e;
+    animation-duration: 2.5s;
+    opacity: 0.5;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  }
+
+  .status-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15), 
+                0 0 0 1px rgba(2, 132, 199, 0.1) inset;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(2, 132, 199, 0.25), 
+                0 0 0 1px rgba(2, 132, 199, 0.15) inset;
+  }
+
+  .status-indicator {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-indicator.active {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2),
+                0 0 12px rgba(16, 185, 129, 0.4);
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .status-indicator.inactive {
+    background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2);
   }
   .greeting-text {
     display: inline-block;
@@ -83,6 +194,11 @@ const GreetingTransition: React.FC<{ loaded: boolean }> = ({ loaded }) => {
 
 const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
+  const statusTimestamp = new Date().toLocaleDateString('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'America/Chicago',
+  });
 
   useEffect(() => {
     // Add a small delay for animation purposes
@@ -171,12 +287,39 @@ const WelcomePage: React.FC = () => {
                 </div>
                 
                 <p className="text-lg sm:text-xl md:text-2xl text-primary-700 leading-relaxed font-semibold">
-                Software Engineer (AI/ML, GIS, Data)
+                AI & ML Engineer
                 </p>
                 
-                <p className="text-base sm:text-lg text-primary-700/80 mt-4 leading-relaxed">
-                  I am actively seeking a challenging and rewarding opportunity
-                </p>
+                <div className="mt-6 w-full">
+                  <div className="relative mx-auto max-w-4xl">
+                    {/* Status badges - modern pill design */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4">
+                      <div className="status-badge">
+                        <span className="status-indicator active"></span>
+                        <span className="text-sm sm:text-base font-semibold text-primary-700">
+                          Actively seeking opportunities
+                        </span>
+                      </div>
+                      
+                      <div className="status-badge opacity-60">
+                        <span className="status-indicator inactive"></span>
+                        <span className="text-sm sm:text-base font-medium text-primary-600/70">
+                          Currently working (details soon)
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Glitch date - modern floating style */}
+                    <div className="flex justify-center mt-4">
+                      <div
+                        className="glitch-date text-xs sm:text-sm"
+                        data-text={statusTimestamp}
+                      >
+                        {statusTimestamp}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -214,71 +357,67 @@ const WelcomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Floating Social Icons */}
-          <div className={`flex gap-6 mt-8 opacity-0 transition-all duration-1000 delay-800 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}>
-            <a 
-              href="https://www.linkedin.com/in/balasubramanyamd" 
-              title="LinkedIn"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative group p-3 rounded-full bg-[#0A66C2] hover:bg-[#004182] transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
-            >
-              <svg className="w-6 h-6 text-white group-hover:text-primary-100 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            
-            <a 
-              href="https://github.com/Subramanyam6" 
-              title="GitHub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative group p-3 rounded-full bg-[#181717] hover:bg-[#0f1419] transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
-            >
-              <svg className="w-6 h-6 text-white group-hover:text-gray-100 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-          </div>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="bg-primary-700 border-t border-primary-600/50 py-6 relative z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <small className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-primary-50" style={{ fontSize: '0.8rem' }}>
-            <span className="flex items-center gap-1">
-              Made with{' '}
-              <span 
-                role="img" 
-                aria-label="fire"
-                className="text-orange-200"
-              >
-                🔥
-              </span>{' '}
-              by Bala Subramanyam
-            </span>
-            <span className="hidden sm:inline text-white/60">·</span>
-            <span>
-              © 2023–<span id="current-year">2025</span> Bala Subramanyam.{' '}
+          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
+            <small className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-primary-50" style={{ fontSize: '0.8rem' }}>
+              <span className="flex items-center gap-1">
+                Made with{' '}
+                <span 
+                  role="img" 
+                  aria-label="fire"
+                  className="text-orange-200"
+                >
+                  🔥
+                </span>{' '}
+                by Bala Subramanyam
+              </span>
+              <span className="hidden sm:inline text-white/60">·</span>
+              <span>
+                © 2023–<span id="current-year">2025</span> Bala Subramanyam.{' '}
+                <a
+                  href="/LICENSE"
+                  target="_blank"
+                  rel="license noopener noreferrer"
+                  className="text-sky-200 hover:text-sky-100 hover:underline transition-all duration-200 cursor-pointer relative z-40 inline-block px-1 py-0.5 rounded hover:bg-sky-600/30"
+                  style={{ textDecoration: 'none' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.textDecoration = 'underline';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.textDecoration = 'none';
+                  }}
+                >
+                  MIT License
+                </a>
+                <span className="sr-only">SPDX-License-Identifier: MIT</span>
+              </span>
+            </small>
+            <div className="flex items-center gap-3">
               <a
-                href="/LICENSE"
+                href={LINKEDIN_URL}
+                title="LinkedIn"
                 target="_blank"
-                rel="license noopener noreferrer"
-                className="text-sky-200 hover:text-sky-100 hover:underline transition-all duration-200 cursor-pointer relative z-40 inline-block px-1 py-0.5 rounded hover:bg-sky-600/30"
-                style={{ textDecoration: 'none' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.textDecoration = 'underline';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.textDecoration = 'none';
-                }}
+                rel="noopener noreferrer"
+                className="relative group p-2.5 rounded-full bg-[#0A66C2] hover:bg-[#004182] transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
               >
-                MIT License
+                <LinkedInIcon className="w-5 h-5 text-white group-hover:text-primary-100 transition-colors duration-300" />
               </a>
-              <span className="sr-only">SPDX-License-Identifier: MIT</span>
-            </span>
-          </small>
+              <a
+                href={GITHUB_URL}
+                title="GitHub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group p-2.5 rounded-full bg-[#181717] hover:bg-[#0f1419] transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
+              >
+                <GitHubIcon className="w-5 h-5 text-white group-hover:text-gray-100 transition-colors duration-300" />
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
 

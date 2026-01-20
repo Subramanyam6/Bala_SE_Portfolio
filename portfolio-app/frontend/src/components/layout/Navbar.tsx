@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { LinkedInIcon, LINKEDIN_URL } from '../SocialIcons';
 
 const navigation = [
   { name: 'Home', href: '/home' },
@@ -100,15 +101,13 @@ const Navbar = () => {
               <div className="py-1" role="none">
                 {/* LinkedIn Option */}
                 <a 
-                  href="https://www.linkedin.com/in/balasubramanyamd" 
+                  href={LINKEDIN_URL} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors duration-150"
                 >
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 mr-3 group-hover:scale-110 transition-transform">
-                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#0A66C2] text-white mr-3 group-hover:scale-110 transition-transform">
+                    <LinkedInIcon className="h-5 w-5 text-white" />
                   </span>
                   <span className="group-hover:translate-x-1 transition-transform duration-150">LinkedIn</span>
                 </a>
@@ -154,7 +153,9 @@ const Navbar = () => {
 
           <NavLink
             to="/home/login"
-            className="btn btn-primary"
+            className="btn btn-primary opacity-50 cursor-not-allowed pointer-events-none"
+            aria-disabled="true"
+            tabIndex={-1}
           >
             Bala's Login
           </NavLink>
@@ -202,14 +203,14 @@ const Navbar = () => {
               <div className="font-medium text-primary-600">Contact</div>
               <div className="pl-4 mt-1 space-y-1">
                 <a 
-                  href="https://linkedin.com" 
+                  href={LINKEDIN_URL} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center py-1 text-sm text-gray-600 hover:text-primary-600"
                 >
-                  <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#0A66C2] text-white mr-2">
+                    <LinkedInIcon className="h-3.5 w-3.5 text-white" />
+                  </span>
                   LinkedIn
                 </a>
                 <Link 
@@ -227,7 +228,9 @@ const Navbar = () => {
 
             <NavLink
               to="/home/login"
-              className="block py-2 font-medium text-primary-600"
+              className="block py-2 font-medium text-primary-600 opacity-50 cursor-not-allowed pointer-events-none"
+              aria-disabled="true"
+              tabIndex={-1}
               onClick={() => setMobileMenuOpen(false)}
             >
               Bala's Login

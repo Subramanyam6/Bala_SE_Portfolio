@@ -1,5 +1,9 @@
 import { motion } from 'framer-motion';
-import { type ComponentType } from 'react';
+import { type ComponentType, type CSSProperties } from 'react';
+
+import FlowingMenu from '../components/FlowingMenu';
+import ProfileCard from '../components/ProfileCard';
+import { GitHubIcon, GITHUB_URL, LinkedInIcon, LINKEDIN_URL } from '../components/SocialIcons';
 
 import {
   SiOpenjdk as SiJava,
@@ -143,87 +147,87 @@ const skills = [
   },
 ];
 
-const experience = [
+const experienceItems = [
   {
-    title: 'Graduate Research Assistant (Data)',
-    org: 'University of Nebraska–Lincoln',
-    date: 'Jan 2025 – Present',
-    bullets: [
-      'Built a real-time data ingestion pipeline to collect and analyze user engagement events, enabling actionable insights for educators and administrators.',
-      'Developed interactive dashboards that visualize key engagement metrics and trends, supporting data-driven decision making.',
-      'Established automated testing processes to ensure high-quality code and reliable system updates.',
-      'Set up continuous integration and deployment pipelines, streamlining service delivery and reducing deployment risk.',
+    text: 'Graduate Research Assistant — UE & SS',
+    subtitle: 'University of Nebraska–Lincoln | Jan 2025 – May 2025',
+    details: [
+      'Built high-volume engagement dashboards to surface student risk and participation signals.',
+      'Strengthened validation and monitoring to catch data breaks early and improve model quality.',
+      'Owned production reliability with automated checks, on-call triage, and clear documentation.',
     ],
   },
   {
-    title: 'Graduate Research Assistant (GIS)',
-    org: 'University of Nebraska–Lincoln',
-    date: 'Aug 2024 – Dec 2024',
-    bullets: [
-      'Developed and deployed a scalable web API for delivering large volumes of geospatial data, supporting rich, interactive map visualizations.',
-      'Ensured secure, high-availability service for geospatial applications used by multiple stakeholders.',
+    text: 'Graduate Research Assistant — GIS Lab',
+    subtitle: 'University of Nebraska–Lincoln | Aug 2024 – Dec 2024',
+    details: [
+      'Delivered ML-backed GIS services supporting access-to-justice research workflows.',
+      'Reduced data defects by standardizing quality checks and review processes.',
+      'Created runbooks and mentored assistants on coding and data practices.',
     ],
   },
   {
-    title: 'Graduate Research Assistant (AI/ML)',
-    org: 'University of Nebraska–Lincoln',
-    date: 'Nov 2021 – Dec 2023',
-    bullets: [
-      '•	Led advanced research projects to improve decision-making capabilities in multi-agent systems, optimizing performance and scalability.',
-      '•	Engineered efficient data structures and workflows to accelerate complex computational tasks.',
-      '•	Leveraged GPU acceleration to deliver real-time analytics and rapid processing of large-scale decision data.',
-      '•	Created intuitive web applications to help users explore and interpret complex research results.'
+    text: 'Graduate Research Assistant — MAS Lab',
+    subtitle: 'University of Nebraska–Lincoln | Nov 2021 – Dec 2023',
+    details: [
+      'Led multi-agent decision research and improved planning performance in cyber-defense simulations.',
+      'Built scalable experiment pipelines and analysis tools for policy evaluation.',
+      'Ensured reproducibility and stability through rigorous testing and documentation.',
     ],
   },
   {
-    title: 'Programmer Analyst',
-    org: 'Cognizant, India',
-    date: 'Feb 2018 – Aug 2021',
-    bullets: [
-      '•	Developed modular backend services to support reliable, high-performance business applications.',
-      '•	Refactored legacy systems to improve maintainability and reduce operational overhead.',
-      '•	Designed and managed data processing workflows for large-scale financial and operational data.',
-      '•	Established robust automation for testing and deployment, ensuring stable releases and minimal downtime.',
-      '•	Achieved high system reliability and responsiveness, meeting demanding service level requirements.',
+    text: 'Programmer Analyst',
+    subtitle: 'Cognizant | Feb 2018 – Aug 2021',
+    details: [
+      'Delivered AI/ML solutions for healthcare payers across risk scoring and analytics.',
+      'Owned model pipelines and production rollouts, improving predictive performance.',
+      'Partnered with compliance and operations to keep services reliable in production.',
     ],
   },
 ];
 
-const education = [
+
+const educationItems = [
   {
-    degree: 'Master of Science, Computer Science (Thesis)',
-    org: 'University of Nebraska–Lincoln',
-    date: 'Aug 2021 – Aug 2025',
-    details: 'Courses: Advanced Software Engineering, Data Structures and Algorithms, Graph Algorithms, Cybersecurity, Cloud Computing, Databases, Computational Linguistics, Multi-Agent Systems',
+    text: 'Master of Science, Computer Science (Thesis)',
+    subtitle: 'University of Nebraska–Lincoln | Aug 2021 – Aug 2025',
+    details: [
+      'Thesis: Investigating the Impact of Agent Openness on Planning in Multi-Agent Systems.',
+      'Coursework across advanced software engineering, algorithms, databases, and cloud systems.',
+    ],
   },
   {
-    degree: 'Bachelor of Technology, Electrical and Electronics Engineering',
-    org: 'SRM Institute of Science and Technology',
-    date: 'Aug 2013 – May 2017',
-    details: '',
+    text: 'Bachelor of Technology, Electrical and Electronics Engineering',
+    subtitle: 'SRM Institute of Science and Technology | Aug 2013 – May 2017',
+    details: [
+      'Built a strong foundation in systems thinking and applied engineering design.',
+      'Completed rigorous lab and capstone work focused on real-world problem solving.',
+    ],
   },
 ];
 
 const socialLinks = [
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/balasubramanyamd',
-    icon: (
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 11.28h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.89v1.36h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v5.59z"/></svg>
-    ),
+    url: LINKEDIN_URL,
+    bgColor: '#0A66C2',
+    hoverBg: '#004182',
+    icon: <LinkedInIcon className="w-5 h-5 text-white" />,
   },
   {
     name: 'GitHub',
-    url: 'https://github.com/Subramanyam6',
-    icon: (
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.63 0-12 5.37-12 12 0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.54 1.236-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.371.823 1.102.823 2.222v3.293c0 .322.218.694.825.576 4.765-1.587 8.2-6.086 8.2-11.385 0-6.63-5.373-12-12-12z"/></svg>
-    ),
+    url: GITHUB_URL,
+    bgColor: '#181717',
+    hoverBg: '#0f1419',
+    icon: <GitHubIcon className="w-5 h-5 text-white" />,
   },
   {
     name: 'UNL AI Research Group',
     url: 'https://iamas.unl.edu',
+    bgColor: '#0ea5e9',
+    hoverBg: '#0284c7',
     icon: (
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
     ),
   },
 ];
@@ -244,7 +248,7 @@ const sectionVariants = {
 
 const AboutPage = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen pb-6">
       <div className="container mx-auto px-4 pt-10">
         <div className="max-w-4xl mx-auto">
           {/* Header/Profile */}
@@ -258,29 +262,36 @@ const AboutPage = () => {
             className="bg-white rounded-3xl shadow-2xl p-10 mb-14 flex flex-col md:flex-row gap-10 items-center md:items-start relative overflow-hidden"
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, type: 'spring' }}
-              className="w-44 h-44 rounded-full overflow-hidden border-4 border-primary-600 shadow-lg flex-shrink-0 bg-gradient-to-br from-primary-100 to-primary-300 animate-fade-in-up"
+              transition={{ duration: 0.9, type: 'spring' }}
+              className="flex-shrink-0"
             >
-              <img
-                src="/Bala DP.jpg"
-                alt="Bala Subramanyam Duggirala"
-                className="w-full h-full object-cover"
+              <ProfileCard
+                avatarUrl="/Bala DP.jpg"
+                name="Bala Subramanyam Duggirala"
+                title="Software Engineer | AI/ML"
+                showUserInfo={false}
+                showDetails={false}
+                behindGlowEnabled={false}
+                cardHeight="280px"
+                cardMaxHeight="320px"
+                cardAspectRatio="0.8"
+                className="w-full max-w-[260px] md:max-w-[300px]"
               />
             </motion.div>
             <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight">
                 Bala Subramanyam Duggirala
               </h1>
-              <p className="text-xl text-primary-600 mb-4 font-semibold">Full Stack Software Engineer</p>
+              <p className="text-xl text-primary-600 mb-5 font-semibold">Software Engineer | AI/ML</p>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-gray-700 mb-6 text-lg"
               >
-                Full-Stack Software Engineer with expertise in developing cloud-native microservices, RESTful APIs, and event-driven systems using Java (Spring Boot), Python (Flask), and AWS/GCP infrastructure. Proven track record in designing scalable, maintainable services, optimizing performance, and collaborating cross-functionally to deliver reliable production software.
+                Software engineer and AI/ML builder who ships end-to-end systems from data pipelines and model validation to reliable services and product UX. I focus on turning ambiguous, real-world problems into trustworthy, scalable solutions teams can operate with confidence.
               </motion.p>
               <div className="flex flex-wrap gap-4 mt-2">
                 {socialLinks.map((link) => (
@@ -289,13 +300,23 @@ const AboutPage = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-outline flex items-center gap-2 px-4 py-2 rounded-lg shadow hover:bg-primary-50 transition-all"
-                    whileHover={{ scale: 1.08, backgroundColor: '#f5f3ff' }}
-                    whileTap={{ scale: 0.97 }}
+                    className="group flex items-center gap-3 px-4 py-2 rounded-full bg-white/90 shadow border border-slate-200 hover:shadow-md transition-all"
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.98 }}
                     transition={{ type: 'spring', stiffness: 300 }}
+                    style={
+                      {
+                        '--icon-bg': link.bgColor,
+                        '--icon-bg-hover': link.hoverBg
+                      } as CSSProperties
+                    }
                   >
-                    {link.icon}
-                    <span className="font-medium">{link.name}</span>
+                    <span
+                      className="flex items-center justify-center w-10 h-10 rounded-full transition-colors bg-[var(--icon-bg)] group-hover:bg-[var(--icon-bg-hover)]"
+                    >
+                      {link.icon}
+                    </span>
+                    <span className="font-medium text-gray-700">{link.name}</span>
                   </motion.a>
                 ))}
               </div>
@@ -408,29 +429,37 @@ const AboutPage = () => {
             className="mb-14"
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Experience</h2>
-            <div className="space-y-8">
-              {experience.map((exp, idx) => (
+            <div className="space-y-6">
+              {experienceItems.map((exp, idx) => (
                 <motion.div
-                  key={exp.title}
+                  key={exp.text}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
-                  viewport={{ once: false }}
-                  transition={{ delay: idx * 0.1, duration: 0.3, ease: 'easeInOut' }}
-                  className="bg-white p-7 rounded-2xl shadow-md border-l-4 border-primary-600 hover:shadow-xl transition-shadow duration-300"
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ delay: idx * 0.12, duration: 0.5, ease: 'easeOut' }}
+                  className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden"
+                  style={{ height: '160px' }}
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-primary-700">{exp.title}</h3>
-                      <p className="text-primary-500 font-medium">{exp.org}</p>
-                    </div>
-                    <p className="text-gray-500 text-sm mt-2 md:mt-0">{exp.date}</p>
-                  </div>
-                  <ul className="list-disc pl-6 text-gray-700 space-y-2 mt-2">
-                    {exp.bullets.map((b, i) => (
-                      <li key={i}>{b}</li>
-                    ))}
-                  </ul>
+                  <FlowingMenu
+                    items={[
+                      {
+                        text: exp.text,
+                        subtitle: exp.subtitle,
+                        details: exp.details
+                      }
+                    ]}
+                    speed={12}
+                    textColor="#0f172a"
+                    bgColor="#ffffff"
+                    marqueeBgColor="#e0f2fe"
+                    marqueeTextColor="#0f172a"
+                    borderColor="#e2e8f0"
+                    itemHeight="160px"
+                    textClassName="text-lg md:text-xl normal-case tracking-normal"
+                    subtitleClassName="text-sm md:text-base normal-case text-slate-500"
+                    detailsClassName="text-sm md:text-base text-slate-800"
+                  />
                 </motion.div>
               ))}
             </div>
@@ -444,28 +473,40 @@ const AboutPage = () => {
             viewport={{ once: false, amount: 0.5 }}
             variants={sectionVariants}
             custom={3}
-            className="mb-14"
+            className="mb-6"
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Education</h2>
-            <div className="space-y-6">
-              {education.map((edu, idx) => (
+            <div className="space-y-5">
+              {educationItems.map((edu, idx) => (
                 <motion.div
-                  key={edu.degree}
+                  key={edu.text}
                   initial={{ opacity: 0, x: 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -40 }}
-                  viewport={{ once: false }}
-                  transition={{ delay: idx * 0.1, duration: 0.3, ease: 'easeInOut' }}
-                  className="bg-white p-6 rounded-2xl shadow border-l-4 border-primary-400"
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ delay: idx * 0.12, duration: 0.5, ease: 'easeOut' }}
+                  className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden"
+                  style={{ height: '130px' }}
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                    <div>
-                      <h3 className="text-lg font-bold text-primary-700">{edu.degree}</h3>
-                      <p className="text-primary-500 font-medium">{edu.org}</p>
-                    </div>
-                    <p className="text-gray-500 text-sm mt-2 md:mt-0">{edu.date}</p>
-                  </div>
-                  {edu.details && <p className="text-gray-700 mt-2 text-sm">{edu.details}</p>}
+                  <FlowingMenu
+                    items={[
+                      {
+                        text: edu.text,
+                        subtitle: edu.subtitle,
+                        details: edu.details
+                      }
+                    ]}
+                    speed={12}
+                    textColor="#0f172a"
+                    bgColor="#ffffff"
+                    marqueeBgColor="#e0f2fe"
+                    marqueeTextColor="#0f172a"
+                    borderColor="#e2e8f0"
+                    itemHeight="130px"
+                    textClassName="text-base md:text-lg normal-case tracking-normal"
+                    subtitleClassName="text-sm md:text-base normal-case text-slate-500"
+                    detailsClassName="text-sm md:text-base text-slate-800"
+                  />
                 </motion.div>
               ))}
             </div>

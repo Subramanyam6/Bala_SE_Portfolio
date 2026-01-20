@@ -11,20 +11,21 @@ const SimpleRobotTest: React.FC = () => {
   const mouseRef = useRef(new THREE.Vector2());
   
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
     
     // Basic Three.js setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     
-    const containerWidth = containerRef.current.clientWidth;
-    const containerHeight = containerRef.current.clientHeight;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
     
     camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(containerWidth, containerHeight);
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
     
     // Basic lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -79,9 +80,7 @@ const SimpleRobotTest: React.FC = () => {
     
     // Mouse move handler
     const handleMouseMove = (event: MouseEvent) => {
-      if (!containerRef.current) return;
-      
-      const rect = containerRef.current.getBoundingClientRect();
+      const rect = container.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       
@@ -98,14 +97,12 @@ const SimpleRobotTest: React.FC = () => {
         }
         
         // Update cursor
-        if (containerRef.current) {
-          containerRef.current.style.cursor = hovering ? 'pointer' : 'default';
-        }
+        container.style.cursor = hovering ? 'pointer' : 'default';
       }
     };
     
     // Add event listener
-    containerRef.current.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('mousemove', handleMouseMove);
     
     // Animation loop
     const animate = () => {
@@ -125,11 +122,9 @@ const SimpleRobotTest: React.FC = () => {
     
     // Cleanup
     return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('mousemove', handleMouseMove);
-        if (renderer.domElement && containerRef.current.contains(renderer.domElement)) {
-          containerRef.current.removeChild(renderer.domElement);
-        }
+      container.removeEventListener('mousemove', handleMouseMove);
+      if (renderer.domElement && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };

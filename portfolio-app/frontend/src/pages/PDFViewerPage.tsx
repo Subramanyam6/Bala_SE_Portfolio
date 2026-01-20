@@ -14,6 +14,7 @@ const pdfMap: Record<string, { title: string; path: string }> = {
 const PDFViewerPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const pdf = slug ? pdfMap[slug] : undefined;
+  const pdfSrc = pdf?.path ? encodeURI(pdf.path) : '';
 
   if (!pdf) {
     return (
@@ -32,7 +33,7 @@ const PDFViewerPage = () => {
       </div>
       <div className="w-full max-w-4xl flex-1 rounded-lg overflow-hidden shadow-lg bg-white" style={{ minHeight: '80vh', height: '80vh' }}>
         <iframe
-          src={pdf.path}
+          src={pdfSrc}
           title={pdf.title}
           className="w-full h-full border-0"
           style={{ minHeight: '100%', minWidth: '100%' }}

@@ -128,13 +128,13 @@ const ContactPage = () => {
       }
     } else {
       // Remove contact details section when checkbox is unchecked
-      let message = formik.values.message;
+      const message = formik.values.message;
       const contactIndex = message.lastIndexOf('\n\nContact Details:');
       if (contactIndex !== -1) {
         formik.setFieldValue('message', message.substring(0, contactIndex));
       }
     }
-  }, [formik.values.wantsReply, formik.values.email, formik.values.phone]);
+  }, [formik, formik.values.wantsReply, formik.values.email, formik.values.phone]);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-sky-100 to-indigo-100 min-h-screen py-16 font-sans animate-fadeIn">
