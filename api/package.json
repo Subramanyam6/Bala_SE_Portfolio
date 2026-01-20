@@ -1,9 +1,0 @@
-{
-  "name": "portfolio-api",
-  "version": "1.0.0",
-  "description": "Serverless API functions for portfolio",
-  "main": "index.js",
-  "dependencies": {
-    "nodemailer": "^6.9.7"
-  }
-}

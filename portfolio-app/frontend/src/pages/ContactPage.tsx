@@ -4,9 +4,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  'https://portfolio-backend-93780733243.us-central1.run.app';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+const normalizeBaseUrl = (value: string) => value.replace(/\/$/, '');
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,27 +54,42 @@ const ContactPage = () => {
 
         console.log('Submitting form with values:', messageData);
 
-        const response = await fetch(`${API_BASE_URL}/api/contact/send`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(messageData),
-        });
+        const sendRequest = async (url: string) => {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(messageData),
+          });
 
-        // Parse response text, handle JSON or plain text
-        const raw = await response.text();
-        let responseData: any = {};
+          // Parse response text, handle JSON or plain text
+          const raw = await response.text();
+          let responseData: any = {};
+          try {
+            responseData = JSON.parse(raw);
+          } catch {
+            // response was not valid JSON
+          }
+          console.log('Server response:', responseData);
+
+          if (!response.ok) {
+            // If JSON has error/message use it, otherwise throw the raw text
+            throw new Error(responseData.error || responseData.message || raw || 'Failed to send message');
+          }
+        };
+
+        const baseUrl = normalizeBaseUrl(API_BASE_URL);
+        const primaryUrl = `${baseUrl}/api/contact/send`;
+
         try {
-          responseData = JSON.parse(raw);
-        } catch {
-          // response was not valid JSON
-        }
-        console.log('Server response:', responseData);
-
-        if (!response.ok) {
-          // If JSON has error/message use it, otherwise throw the raw text
-          throw new Error(responseData.error || responseData.message || raw || 'Failed to send message');
+          await sendRequest(primaryUrl);
+        } catch (error) {
+          if (baseUrl && error instanceof TypeError) {
+            await sendRequest('/api/contact/send');
+          } else {
+            throw error;
+          }
         }
 
         setSubmitSuccess(true);

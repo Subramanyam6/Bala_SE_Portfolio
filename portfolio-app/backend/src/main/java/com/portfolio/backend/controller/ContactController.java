@@ -1,22 +1,19 @@
 package com.portfolio.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.portfolio.backend.dto.ContactFormDto;
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,18 +23,22 @@ import java.util.Map;
 public class ContactController {
     
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
-    private static final String DUMMY_KEY = "dummy-key-for-development";
+    private static final String RECIPIENT_EMAIL = "bduggirala2@huskers.unl.edu";
+    private static final String POSTMARK_ENDPOINT = "https://api.postmarkapp.com/email";
 
-    @Value("${sendgrid.api.key}")
-    private String sendgridApiKey;
-
-    @Value("${sendgrid.from.email}")
+    @Value("${postmark.server.token:}")
+    private String postmarkServerToken;
+    
+    @Value("${postmark.from.email:}")
     private String fromEmail;
-    
-    private final Environment environment;
-    
-    public ContactController(Environment environment) {
-        this.environment = environment;
+    @Value("${postmark.message.stream:outbound}")
+    private String postmarkMessageStream;
+
+    private final ObjectMapper objectMapper;
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    public ContactController(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/send")
@@ -46,7 +47,7 @@ public class ContactController {
             // Log incoming request and configuration
             logger.info("Starting email send process...");
             logger.debug("From email configured as: {}", fromEmail);
-            logger.debug("SendGrid API key present: {}", sendgridApiKey != null);
+            logger.debug("Postmark server token present: {}", postmarkServerToken != null && !postmarkServerToken.isBlank());
             logger.info("Received contact form submission from: {}", contactForm.getName());
             
             // Validate required fields
@@ -63,20 +64,18 @@ public class ContactController {
                 return ResponseEntity.badRequest().body(Map.of("error", "Email is required when requesting a reply"));
             }
 
-            // Check if we're in development mode with dummy key
-            if (DUMMY_KEY.equals(sendgridApiKey)) {
-                logger.warn("Running in development mode with dummy SendGrid key. Email will not be sent.");
-                logger.info("Would have sent email with content: Subject='{}', To='{}', From='{}'", 
-                    contactForm.getSubject(), "bduggirala2@huskers.unl.edu", fromEmail);
-                return ResponseEntity.ok(Map.of(
-                    "message", "Message logged (development mode - email not sent)",
-                    "development_mode", true
-                ));
+            if (postmarkServerToken == null || postmarkServerToken.isBlank()) {
+                logger.error("Postmark server token is not configured.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("error", "Postmark server token is not configured"));
             }
 
-            // Create the SendGrid email
-            Email from = new Email(fromEmail);
-            Email to = new Email("bduggirala2@huskers.unl.edu");
+            if (fromEmail == null || fromEmail.isBlank()) {
+                logger.error("Postmark from email is not configured.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("error", "Postmark from email is not configured"));
+            }
+
             String subject = "[Portfolio Contact] " + contactForm.getSubject();
             
             // Format the email content
@@ -108,33 +107,49 @@ public class ContactController {
                 }
             }
             
-            Content content = new Content("text/html", emailContent.toString());
-            Mail mail = new Mail(from, subject, to, content);
-            
-            // Send the email using SendGrid
-            SendGrid sg = new SendGrid(sendgridApiKey);
-            Request request = new Request();
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            
-            logger.info("Sending email to SendGrid...");
-            Response response = sg.api(request);
-            logger.info("SendGrid response status code: {}", response.getStatusCode());
-            logger.debug("SendGrid response headers: {}", response.getHeaders());
-            
-            if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("From", fromEmail);
+            payload.put("To", RECIPIENT_EMAIL);
+            payload.put("Subject", subject);
+            payload.put("HtmlBody", emailContent.toString());
+            payload.put("MessageStream", postmarkMessageStream);
+
+            if (contactForm.isWantsReply() && contactForm.getEmail() != null && !contactForm.getEmail().trim().isEmpty()) {
+                payload.put("ReplyTo", contactForm.getEmail().trim());
+            }
+
+            String body = objectMapper.writeValueAsString(payload);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(POSTMARK_ENDPOINT))
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .header("X-Postmark-Server-Token", postmarkServerToken)
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .build();
+
+            logger.info("Sending email to Postmark...");
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("Postmark response status code: {}", response.statusCode());
+            logger.debug("Postmark response body: {}", response.body());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
                 logger.info("Email sent successfully");
                 Map<String, String> successResponse = new HashMap<>();
                 successResponse.put("message", "Message sent successfully");
                 return ResponseEntity.ok(successResponse);
             } else {
-                logger.error("SendGrid error response body: {}", response.getBody());
+                logger.error("Postmark error response body: {}", response.body());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("error", "Failed to send email. Status code: " + response.getStatusCode()));
+                        .body(Map.of("error", "Failed to send email. Status code: " + response.statusCode()));
             }
         } catch (IOException e) {
             logger.error("Error sending email: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to send email: " + e.getMessage()));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Email send interrupted: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Failed to send email: " + e.getMessage()));
         } catch (Exception e) {

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RobotAnimation from '../components/welcome/RobotAnimation';
-import Particles from 'react-tsparticles';
-import { loadSlim } from 'tsparticles-slim';
-import type { Engine } from 'tsparticles-engine';
+import Hyperspeed from '../components/Hyperspeed';
+import { hyperspeedPresets } from '../components/HyperSpeedPresets';
 
 // Custom CSS for advanced animations
 const customStyles = `
@@ -13,8 +12,8 @@ const customStyles = `
   }
   
   @keyframes glow {
-    0%, 100% { text-shadow: 0 0 40px rgba(14, 165, 233, 0.4); }
-    50% { text-shadow: 0 0 60px rgba(14, 165, 233, 0.7), 0 0 80px rgba(2, 132, 199, 0.5); }
+    0%, 100% { text-shadow: 0 0 18px rgba(2, 132, 199, 0.25); }
+    50% { text-shadow: 0 0 28px rgba(2, 132, 199, 0.45), 0 0 44px rgba(56, 189, 248, 0.35); }
   }
   
   .float-animation {
@@ -26,14 +25,14 @@ const customStyles = `
   }
   
   .glass-morphism {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(2, 132, 199, 0.16);
+    box-shadow: 0 18px 48px rgba(2, 132, 199, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
   
   .button-glow:hover {
-    box-shadow: 0 0 30px rgba(14, 165, 233, 0.6), 0 0 60px rgba(2, 132, 199, 0.4);
+    box-shadow: 0 0 24px rgba(2, 132, 199, 0.45), 0 0 48px rgba(56, 189, 248, 0.3);
   }
   .greeting-text {
     display: inline-block;
@@ -85,14 +84,6 @@ const GreetingTransition: React.FC<{ loaded: boolean }> = ({ loaded }) => {
 const WelcomePage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
 
-  const particlesInit = async (engine: Engine) => {
-    await loadSlim(engine);
-  };
-
-  const particlesLoaded = async () => {
-    // Particles loaded successfully
-  };
-
   useEffect(() => {
     // Add a small delay for animation purposes
     const timer = setTimeout(() => {
@@ -112,94 +103,13 @@ const WelcomePage: React.FC = () => {
       />
 
       <div 
-        className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-r from-primary-600 to-primary-400 text-white w-screen"
+        className="min-h-screen flex flex-col relative overflow-hidden bg-primary-50 text-slate-900 w-screen"
       >
-      {/* Enhanced Particles background - full width */}
-      <div className="absolute inset-0 z-0 pointer-events-none w-full">
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          loaded={particlesLoaded}
-          options={{
-            background: { color: { value: "transparent" } },
-            fpsLimit: 120,
-            interactivity: {
-              events: {
-                onHover: { enable: true, mode: ["repulse", "bubble"] },
-                onClick: { enable: true, mode: "push" },
-                resize: true,
-              },
-              modes: {
-                repulse: { distance: 120, duration: 0.4 },
-                bubble: { distance: 200, size: 8, duration: 0.4 },
-                push: { quantity: 3 },
-              },
-            },
-            particles: {
-              color: { 
-                value: ["#0ea5e9", "#0284c7", "#0369a1", "#38bdf8", "#7dd3fc"] 
-              },
-              number: { value: 80, density: { enable: true, area: 800 } },
-              shape: { 
-                type: ["circle", "triangle", "polygon"],
-                polygon: { nb_sides: 6 }
-              },
-              opacity: {
-                value: 0.7,
-                random: { enable: true, minimumValue: 0.3 },
-                animation: {
-                  enable: true,
-                  speed: 0.5,
-                  minimumValue: 0.3,
-                  sync: false
-                }
-              },
-              size: {
-                value: { min: 1, max: 6 },
-                random: true,
-                animation: {
-                  enable: true,
-                  speed: 2,
-                  minimumValue: 1,
-                  sync: false
-                }
-              },
-              move: {
-                enable: true,
-                speed: { min: 0.5, max: 2 },
-                direction: "none",
-                random: true,
-                straight: false,
-                outModes: "out",
-                attract: {
-                  enable: true,
-                  rotateX: 600,
-                  rotateY: 600
-                }
-              },
-              links: {
-                enable: true,
-                distance: 150,
-                color: "#0ea5e9",
-                opacity: 0.3,
-                width: 1,
-                triangles: {
-                  enable: true,
-                  color: "#38bdf8",
-                  opacity: 0.1
-                }
-              },
-            },
-            detectRetina: true,
-          }}
-        />
-      </div>
-
-      {/* Animated Background Orbs */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-gradient-to-r from-primary-500/20 to-primary-600/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-primary-400/20 to-primary-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary-300/10 to-primary-400/10 rounded-full blur-2xl animate-ping"></div>
+      {/* Hyperspeed background - centered with golden theme */}
+      <div className="absolute inset-0 z-0 pointer-events-none w-full h-full flex items-center justify-center">
+        <div className="w-full h-full">
+          <Hyperspeed effectOptions={hyperspeedPresets.six} />
+        </div>
       </div>
       
       {/* Content container - constrained width for text, but allows robot to be full width */}
@@ -207,17 +117,17 @@ const WelcomePage: React.FC = () => {
         {/* Welcome message section with glassmorphism - constrained width */}
         <div className="pt-16 pb-4 text-center z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Glassmorphism Container */}
-          <div className="glass-morphism float-animation transform scale-95 backdrop-blur-lg bg-white/10 border border-white/20 rounded-3xl px-8 py-4 sm:px-12 sm:py-6 shadow-2xl mb-6">
+          <div className="glass-morphism float-animation transform scale-95 bg-white/85 rounded-3xl px-8 py-4 sm:px-12 sm:py-6 shadow-2xl mb-6">
             
             {/* Namaste Text Section - Perfectly Centered */}
             <div className="text-center mb-8">
               <div className="overflow-hidden">
                 <h1
-                  className={`glow-animation relative font-black tracking-tight leading-relaxed mb-6 text-white opacity-0 transition-all duration-1000 ease-out ${loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'} glow-animation z-20`}
+                  className={`glow-animation relative font-black tracking-tight leading-relaxed mb-6 text-primary-600 opacity-0 transition-all duration-1000 ease-out ${loaded ? 'opacity-100 translate-y-0 scale-100' : 'translate-y-10 scale-95'} glow-animation z-20`}
                   style={{
                     fontFamily: '"Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
                     textShadow:
-                      '0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 1)',
+                      '0 0 16px rgba(2, 132, 199, 0.25), 0 0 30px rgba(56, 189, 248, 0.25)',
                     fontSize: 'clamp(3rem, 8vw, 8rem)',
                   }}
                 >
@@ -241,7 +151,7 @@ const WelcomePage: React.FC = () => {
             
             <div className="overflow-hidden mb-6 mt-4">
               <div 
-                className={`h-1 bg-gradient-to-r from-transparent via-primary-300 to-transparent rounded-full opacity-0 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 scale-x-100' : 'scale-x-0'}`}
+                className={`h-1 bg-gradient-to-r from-transparent via-primary-200 to-transparent rounded-full opacity-0 transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 scale-x-100' : 'scale-x-0'}`}
               />
             </div>
             
@@ -252,20 +162,19 @@ const WelcomePage: React.FC = () => {
                   fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
                 }}
               >
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-white via-primary-100 to-primary-200 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-primary-600">
                   I'm <span className="relative inline-block">
-                    <span className="text-white font-black">
+                    <span className="bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent font-black">
                       Bala Subramanyam
                     </span>
-                    <span className="absolute -right-2 top-0 text-2xl">✨</span>
                   </span>
                 </div>
                 
-                <p className="text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed font-light">
+                <p className="text-lg sm:text-xl md:text-2xl text-primary-700 leading-relaxed font-semibold">
                   Full Stack Software Engineer & AI Researcher
                 </p>
                 
-                <p className="text-base sm:text-lg text-white/80 mt-4 leading-relaxed">
+                <p className="text-base sm:text-lg text-primary-700/80 mt-4 leading-relaxed">
                   Crafting modern web experiences and exploring intelligent solutions
                 </p>
               </div>
@@ -279,11 +188,11 @@ const WelcomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
             <Link 
               to="/home"
-              className={`inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/90 text-primary-700 font-semibold shadow-md 
+              className={`inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/95 text-primary-700 font-semibold shadow-md border border-primary-200
      transform transition-all duration-300 ease-in-out 
      hover:scale-105 hover:shadow-2xl 
-     hover:ring-4 hover:ring-primary-300 ring-opacity-50 
-     hover:bg-white hover:text-primary-900 
+     hover:ring-4 hover:ring-primary-200 ring-opacity-50 
+     hover:bg-primary-600 hover:text-white 
      text-lg sm:text-xl 
      opacity-0 delay-600 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
             >
@@ -292,11 +201,11 @@ const WelcomePage: React.FC = () => {
             <div className="relative inline-block">
               <Link
                 to="/home/contact"
-                className={`inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/90 text-primary-700 font-semibold shadow-md 
+                className={`inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white/95 text-primary-700 font-semibold shadow-md border border-primary-200
      transform transition-all duration-300 ease-in-out 
      hover:scale-105 hover:shadow-2xl 
-     hover:ring-4 hover:ring-primary-300 ring-opacity-50 
-     hover:bg-white hover:text-primary-900 
+     hover:ring-4 hover:ring-primary-200 ring-opacity-50 
+     hover:bg-primary-600 hover:text-white 
      text-lg sm:text-xl 
      opacity-0 delay-600 ${loaded ? 'opacity-100 translate-y-0' : 'translate-y-10'}`}
               >
@@ -337,13 +246,13 @@ const WelcomePage: React.FC = () => {
       {/* Footer */}
       <footer className="bg-primary-700 border-t border-primary-600/50 py-6 relative z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <small className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-gray-300" style={{ fontSize: '0.8rem' }}>
+          <small className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-primary-50" style={{ fontSize: '0.8rem' }}>
             <span className="flex items-center gap-1">
               Made with{' '}
               <span 
                 role="img" 
                 aria-label="fire"
-                className="text-orange-400"
+                className="text-orange-200"
               >
                 🔥
               </span>{' '}
@@ -356,7 +265,7 @@ const WelcomePage: React.FC = () => {
                 href="/LICENSE"
                 target="_blank"
                 rel="license noopener noreferrer"
-                className="text-blue-300 hover:text-blue-100 hover:underline transition-all duration-200 cursor-pointer relative z-40 inline-block px-1 py-0.5 rounded hover:bg-blue-600/20"
+                className="text-sky-200 hover:text-sky-100 hover:underline transition-all duration-200 cursor-pointer relative z-40 inline-block px-1 py-0.5 rounded hover:bg-sky-600/30"
                 style={{ textDecoration: 'none' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = 'underline';
