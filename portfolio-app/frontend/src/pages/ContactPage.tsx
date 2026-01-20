@@ -4,7 +4,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { UserIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+const DEFAULT_API_BASE_URL = 'https://portfolio-backend-vnt4.onrender.com';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL).trim();
 const normalizeBaseUrl = (value: string) => value.replace(/\/$/, '');
 
 const ContactPage = () => {

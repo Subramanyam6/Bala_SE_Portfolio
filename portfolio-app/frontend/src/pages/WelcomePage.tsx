@@ -171,11 +171,11 @@ const WelcomePage: React.FC = () => {
                 </div>
                 
                 <p className="text-lg sm:text-xl md:text-2xl text-primary-700 leading-relaxed font-semibold">
-                  Full Stack Software Engineer & AI Researcher
+                Software Engineer (AI/ML, GIS, Data)
                 </p>
                 
                 <p className="text-base sm:text-lg text-primary-700/80 mt-4 leading-relaxed">
-                  Crafting modern web experiences and exploring intelligent solutions
+                  I am actively seeking a challenging and rewarding opportunity
                 </p>
               </div>
             </div>
