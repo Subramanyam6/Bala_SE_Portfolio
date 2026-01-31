@@ -58,6 +58,17 @@ export const featuredProjects = [
   },
   {
     id: 6,
+    title: 'RankRx Light',
+    slug: 'rankrx-light',
+    description: 'AI-powered USMLE residency application ranking system. Upload your ERAS application for instant analysis and compare against 200+ synthetic applicants.',
+    thumbnail: 'https://via.placeholder.com/600x400?text=RankRx+Light',
+    technologies: ['Next.js', 'Vercel', 'AI', 'PDF Parsing'],
+    liveUrl: 'https://rank-rx-light-git-original-app-subramanyam6s-projects.vercel.app',
+    hasPdf: false,
+    pdfPath: ''
+  },
+  {
+    id: 7,
     title: 'Literature Review Document',
     slug: 'literature-review-rl-mas',
     description: 'A comprehensive literature review on reinforcement learning in single and multi-agent systems.',
@@ -67,7 +78,7 @@ export const featuredProjects = [
     hasPdf: true
   },
   {
-    id: 7,
+    id: 8,
     title: 'My Thesis',
     slug: 'my-thesis',
     description: 'Investigating the Impact of Agent Openness on Planning in Multi-Agent Systems.',
