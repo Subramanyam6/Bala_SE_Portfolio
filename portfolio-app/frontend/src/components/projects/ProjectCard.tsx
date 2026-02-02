@@ -163,7 +163,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         
         {/* Hover overlay with buttons */}
         {isHovered && !isNewProject && (
-          <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center transition-opacity duration-300 p-4">
+          <div className={`absolute inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center transition-opacity duration-300 p-4 ${isThesisCard ? 'z-20' : ''}`}>
             <div className="space-y-3 w-full max-w-xs">
               {project.hasPdf && project.pdfPath ? (
                 <>
