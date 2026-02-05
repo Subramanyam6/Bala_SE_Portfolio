@@ -1,7 +1,20 @@
 export const featuredProjects = [
   {
     id: 1,
-    title: 'HDR Pilot ideas',
+    title: 'vLLM LLM-d Inference Control Tower',
+    slug: 'vllm-llm-d-inference-control-tower',
+    description: 'A Hugging Face Space for vLLM-based LLM inference control and monitoring.',
+    thumbnail: 'https://via.placeholder.com/600x400?text=vLLM+Inference+Tower',
+    technologies: ['Hugging Face', 'vLLM', 'LLM', 'Inference'],
+    liveUrl: 'https://huggingface.co/spaces/Subramanyam6/vLLM_llm-d_InferenceControlTower',
+    previewUrl: 'https://subramanyam6-vllm-llm-d-inferencecontroltower.hf.space/',
+    hasPdf: false,
+    pdfPath: '',
+    showNewBadge: true
+  },
+  {
+    id: 2,
+    title: 'HDR Pilot Ideas',
     slug: 'hdr-pilot-ideas',
     description: 'A hub for HDR pilot project concepts, notes, and quick feasibility checks.',
     thumbnail: 'https://via.placeholder.com/600x400?text=HDR+Pilot+Ideas',
@@ -11,7 +24,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 2,
+    id: 3,
     title: 'HDR ML Proposal Verification Assistant',
     slug: 'hdr-ml-proposal-verification-assistant',
     description: 'A Hugging Face Space to validate HDR ML proposals and highlight gaps.',
@@ -23,7 +36,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 3,
+    id: 4,
     title: 'Multi-agent RL War Simulation',
     slug: 'multi-agent-rl-war-simulation',
     description: 'A live multi-agent RL war simulation hosted on Hugging Face Spaces.',
@@ -35,7 +48,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 4,
+    id: 5,
     title: 'Equipment Marketplace',
     slug: 'equipment-marketplace',
     description: 'A platform for buying and selling heavy machinery with secure transactions and vendor verification.',
@@ -46,7 +59,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 5,
+    id: 6,
     title: 'California Public Info GIS',
     slug: 'california-public-info-gis',
     description: 'An interactive GIS dashboard for California public information.',
@@ -57,7 +70,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 6,
+    id: 7,
     title: 'RankRx Light',
     slug: 'rankrx-light',
     description: 'AI-powered USMLE residency application ranking system. Upload your ERAS application for instant analysis and compare against 200+ synthetic applicants.',
@@ -68,7 +81,7 @@ export const featuredProjects = [
     pdfPath: ''
   },
   {
-    id: 7,
+    id: 8,
     title: 'Literature Review Document',
     slug: 'literature-review-rl-mas',
     description: 'A comprehensive literature review on reinforcement learning in single and multi-agent systems.',
@@ -78,7 +91,7 @@ export const featuredProjects = [
     hasPdf: true
   },
   {
-    id: 8,
+    id: 9,
     title: 'My Thesis',
     slug: 'my-thesis',
     description: 'Investigating the Impact of Agent Openness on Planning in Multi-Agent Systems.',

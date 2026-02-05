@@ -120,6 +120,29 @@
   }
 }
 
+/* RGB flashing NEW badge - vibrant neon colors */
+@keyframes rgb-flash {
+  0%, 100% { color: #ff3333; text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333; }
+  33% { color: #33ff33; text-shadow: 0 0 10px #33ff33, 0 0 20px #33ff33; }
+  66% { color: #3399ff; text-shadow: 0 0 10px #3399ff, 0 0 20px #3399ff; }
+}
+
+@keyframes rgb-border-flash {
+  0%, 100% { border-color: #ff3333 !important; box-shadow: 0 0 10px #ff3333, inset 0 0 8px rgba(255,51,51,0.3); }
+  33% { border-color: #33ff33 !important; box-shadow: 0 0 10px #33ff33, inset 0 0 8px rgba(51,255,51,0.3); }
+  66% { border-color: #3399ff !important; box-shadow: 0 0 10px #3399ff, inset 0 0 8px rgba(51,153,255,0.3); }
+}
+
+.badge-new-rgb {
+  animation: rgb-flash 1.2s ease-in-out infinite;
+  color: #ff3333;
+}
+
+.badge-new-rgb-border {
+  animation: rgb-border-flash 1.2s ease-in-out infinite;
+  border-width: 2px;
+}
+
 /* Modal animation */
 @keyframes modal-pop {
   from {

@@ -18,6 +18,7 @@ interface Project {
   previewUrl?: string;
   hasPdf: boolean;
   pdfPath: string;
+  showNewBadge?: boolean;
 }
 
 interface ProjectCardProps {
@@ -89,6 +90,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       className="relative overflow-hidden w-full"
       style={{ aspectRatio: '16 / 9' }}
     >
+        {project.showNewBadge && (
+          <span className="absolute top-2 right-2 z-[100] px-2.5 py-1 rounded-md font-bold text-xs uppercase tracking-wider bg-black/95 border-2 border-transparent badge-new-rgb badge-new-rgb-border">
+            New
+          </span>
+        )}
         {project.hasPdf && project.pdfPath ? (
           <div className={`w-full h-full relative ${isThesisCard ? 'z-10' : ''}`}>
             {isIframeLoading && (
