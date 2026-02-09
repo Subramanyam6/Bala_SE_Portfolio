@@ -1,7 +1,7 @@
 export const featuredProjects = [
   {
     id: 1,
-    title: 'vLLM LLM-d Inference Control Tower',
+    title: 'vLLM/llm-d Inference Control Tower',
     slug: 'vllm-llm-d-inference-control-tower',
     description: 'A Hugging Face Space for vLLM-based LLM inference control and monitoring.',
     thumbnail: 'https://via.placeholder.com/600x400?text=vLLM+Inference+Tower',

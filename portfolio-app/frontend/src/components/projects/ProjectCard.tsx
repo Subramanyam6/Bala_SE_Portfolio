@@ -91,7 +91,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       style={{ aspectRatio: '16 / 9' }}
     >
         {project.showNewBadge && (
-          <span className="absolute top-2 right-2 z-[100] px-2.5 py-1 rounded-md font-bold text-xs uppercase tracking-wider bg-black/95 border-2 border-transparent badge-new-rgb badge-new-rgb-border">
+          <span className="absolute top-2 right-2 z-[100] px-2.5 py-1 rounded-md font-bold text-xs uppercase tracking-wider bg-primary-600 text-white border border-primary-400 badge-new-pulse">
             New
           </span>
         )}
